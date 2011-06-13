@@ -178,9 +178,9 @@ namespace Gibbed.Infantry.FileFormats
             var tileData = input.ReadRLE(3, this.Tiles.Length, true);
             for (int i = 0, j = 0; i < this.Tiles.Length; i++, j += 3)
             {
-                this.Tiles[i].A = tileData[j + 0];
-                this.Tiles[i].B = tileData[j + 1];
-                this.Tiles[i].C = tileData[j + 2];
+                this.Tiles[i].BitsA = tileData[j + 0];
+                this.Tiles[i].BitsB = tileData[j + 1];
+                this.Tiles[i].BitsC = tileData[j + 2];
             }
 
             if (header.Version < 4)
@@ -195,9 +195,9 @@ namespace Gibbed.Infantry.FileFormats
 
                 for (int i = 0; i < this.Tiles.Length; i++)
                 {
-                    var a = this.Tiles[i].C;
+                    var a = this.Tiles[i].BitsC;
                     var b = (byte)((magic[a & 0x1F] ^ a) & 0x1F);
-                    this.Tiles[i].C ^= b;
+                    this.Tiles[i].BitsC ^= b;
                 }
             }
 
@@ -222,10 +222,10 @@ namespace Gibbed.Infantry.FileFormats
                         //entities[i] = new Level.Entity();
                         entities[i].X = oldEntity.X;
                         entities[i].Y = oldEntity.Y;
-                        entities[i].U04 = oldEntity.U04 & 0x3FFFFFFFu;
-                        entities[i].U08 = oldEntity.U08 & 0x7FFFFFFFu;
-                        entities[i].U0C = (oldEntity.U0D & 0x7Fu) << 23;
-                        entities[i].U10 = oldEntity.U0C;
+                        entities[i].BitsA = oldEntity.BitsA & 0x3FFFFFFFu;
+                        entities[i].BitsB = oldEntity.BitsB & 0x7FFFFFFFu;
+                        entities[i].BitsC = (oldEntity.BitsD & 0x7Fu) << 23;
+                        entities[i].BitsD = oldEntity.BitsC;
                     }
                 }
             }
@@ -234,7 +234,7 @@ namespace Gibbed.Infantry.FileFormats
             {
                 for (int i = 0; i < header.EntityCount; i++)
                 {
-                    entities[i].U0C &= 0xBFFFFFFFu;
+                    entities[i].BitsC &= 0xBFFFFFFFu;
                 }
             }
 

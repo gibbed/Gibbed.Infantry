@@ -140,11 +140,11 @@ namespace Gibbed.Infantry.DecompileLVL
 
                     for (int i = 0, j = 0; i < level.Tiles.Length; i++, j += 4)
                     {
-                        tiles[j + 0] = level.Tiles[i].A;
+                        tiles[j + 0] = level.Tiles[i].BitsA;
                         tiles[j + 0] &= 0x7F;
                         tiles[j + 1] = 0;
-                        tiles[j + 2] = level.Tiles[i].C;
-                        tiles[j + 3] = level.Tiles[i].B;
+                        tiles[j + 2] = level.Tiles[i].BitsC;
+                        tiles[j + 3] = level.Tiles[i].BitsB;
                     }
 
                     using (var rle = new MemoryStream())

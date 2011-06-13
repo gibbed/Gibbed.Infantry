@@ -20,18 +20,13 @@
  *    distribution.
  */
 
-using System.Runtime.InteropServices;
-
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 14*/)]
-    internal struct OldEntity
+    public enum Transluency
     {
-        public short X;
-        public short Y;
-        public uint BitsA;
-        public uint BitsB;
-        public byte BitsC;
-        public byte BitsD;
+        Opaque = 0,
+        Percent50 = 1,
+        Percent33 = 2,
+        Percent25 = 3,
     }
 }

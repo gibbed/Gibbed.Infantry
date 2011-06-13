@@ -20,18 +20,13 @@
  *    distribution.
  */
 
-using System.Runtime.InteropServices;
-
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 14*/)]
-    internal struct OldEntity
+    public enum LightColor
     {
-        public short X;
-        public short Y;
-        public uint BitsA;
-        public uint BitsB;
-        public byte BitsC;
-        public byte BitsD;
+        White = 0,
+        Red = 1,
+        Green = 2,
+        Blue = 3,
     }
 }

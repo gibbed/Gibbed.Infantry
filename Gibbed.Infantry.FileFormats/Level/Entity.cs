@@ -29,18 +29,212 @@ namespace Gibbed.Infantry.FileFormats.Level
     {
         public short X;
         public short Y;
-        public uint U04;
-        public uint U08;
-        public uint U0C;
-        public byte U10;
+        public uint BitsA;
+        public uint BitsB;
+        public uint BitsC;
+        public byte BitsD;
 
         public int ObjectId
         {
-            get { return (int)(this.U04 & 0x1FFF); }
+            get { return (int)(this.BitsA & 0x00001FFF); }
             set
             {
-                this.U04 &= ~0x1FFFu;
-                this.U04 |= (uint)(value & 0x1FFF);
+                this.BitsA &= ~0x00001FFFu;
+                this.BitsA |= (uint)(value & 0x00001FFF);
+            }
+        }
+
+        public int UnknownA_1
+        {
+            get { return (int)((this.BitsA & 0x000FE000) >> 13); }
+            set
+            {
+                this.BitsA &= ~0x000FE000u;
+                this.BitsA |= (uint)((value & 0x000000007F) << 13);
+            }
+        }
+
+        public int AnimationTime
+        {
+            get { return (int)((this.BitsA & 0x3FF00000) >> 20); }
+            set
+            {
+                this.BitsA &= ~0x3FF00000u;
+                this.BitsA |= (uint)((value & 0x000003FF) << 20);
+            }
+        }
+
+        public Transluency Transluency
+        {
+            get { return (Transluency)((this.BitsA & 0xC0000000) >> 30); }
+            set
+            {
+                this.BitsA &= ~0xC0000000u;
+                this.BitsA |= (uint)(((int)value & 0x00000003) << 30);
+            }
+        }
+
+        public int TimeDelta
+        {
+            get { return (int)(this.BitsB & 0x00001FFF); }
+            set
+            {
+                this.BitsB &= ~0x00001FFFu;
+                this.BitsB |= (uint)(value & 0x00001FFF);
+            }
+        }
+
+        public int ExtraData
+        {
+            get { return (int)((this.BitsB & 0x03FFE000) >> 13); }
+            set
+            {
+                this.BitsB &= ~0x03FFE000u;
+                this.BitsB |= (uint)((value & 0x00001FFF) << 13);
+            }
+        }
+
+        public DrawOrder DrawOrder
+        {
+            get { return (DrawOrder)((this.BitsB & 0x1C000000) >> 26); }
+            set
+            {
+                this.BitsB &= ~0x1C000000u;
+                this.BitsB |= (uint)(((int)value & 0x00000007) << 26);
+            }
+        }
+
+        public DetailLevel DetailLevel
+        {
+            get { return (DetailLevel)((this.BitsB & 0x60000000) >> 29); }
+            set
+            {
+                this.BitsB &= ~0x60000000u;
+                this.BitsB |= (uint)(((int)value & 0x00000003) << 29);
+            }
+        }
+
+        public bool SmartTransluency
+        {
+            get { return (this.BitsB & 0x80000000) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    this.BitsB |= 0x80000000u;
+                }
+                else
+                {
+                    this.BitsB &= ~0x80000000u;
+                }
+            }
+        }
+
+        public int Value
+        {
+            get { return (sbyte)(this.BitsC & 0x000000FF); }
+            set
+            {
+                this.BitsC &= ~0x000000FFu;
+                this.BitsC |= (uint)((byte)value & 0x000000FFu);
+            }
+        }
+
+        public int Saturation
+        {
+            get { return (sbyte)((this.BitsC & 0x0000FF00) >> 8); }
+            set
+            {
+                this.BitsC &= ~0x0000FF00u;
+                this.BitsC |= (uint)(((byte)value & 0x000000FF) << 8);
+            }
+        }
+
+        public int Hue
+        {
+            get { return (int)((this.BitsC & 0x007F0000) >> 16); }
+            set
+            {
+                this.BitsC &= ~0x007F0000u;
+                this.BitsC |= (uint)((value & 0x0000007F) << 16);
+            }
+        }
+
+        public LightColor LightColor
+        {
+            get { return (LightColor)(this.LightValue / 24); }
+            set
+            {
+                var intensity = this.LightValue % 24;
+                this.LightValue = ((int)value * 24) + intensity;
+            }
+        }
+
+        public int LightIntensity
+        {
+            get { return this.LightValue % 24; }
+            set
+            {
+                var color = this.LightValue / 24;
+                this.LightValue = (color * 24) + (value % 24);
+            }
+        }
+
+        private int LightValue
+        {
+            get { return (int)((this.BitsC & 0x3F800000) >> 23); }
+            set
+            {
+                this.BitsC &= ~0x3F800000u;
+                this.BitsC |= (uint)((value & 0x0000007F) << 23);
+            }
+        }
+
+        public ExtraDataMeaning ExtraDataMeaning
+        {
+            get { return (ExtraDataMeaning)((this.BitsC & 0x40000000) >> 30); }
+            set
+            {
+                this.BitsC &= ~0x40000000u;
+                this.BitsC |= (uint)(((int)value & 0x00000001) << 30);
+            }
+        }
+
+        // probably unused
+        public bool UnknownC_6
+        {
+            get { return (this.BitsC & 0x80000000) != 0; }
+            set
+            {
+                if (value == true)
+                {
+                    this.BitsB |= 0x80000000u;
+                }
+                else
+                {
+                    this.BitsB &= ~0x80000000u;
+                }
+            }
+        }
+
+        public int PaletteShift
+        {
+            get { return (int)(this.BitsD & 0x3F); }
+            set
+            {
+                this.BitsC &= ~0x3Fu;
+                this.BitsC |= (byte)(value & 0x3F);
+            }
+        }
+
+        // probably unused
+        public int UnknownD_1
+        {
+            get { return (int)((this.BitsD & 0xC0) >> 6); }
+            set
+            {
+                this.BitsD &= 0x3F; //~0xC0
+                this.BitsD |= (byte)((value & 0x03) << 6);
             }
         }
     }

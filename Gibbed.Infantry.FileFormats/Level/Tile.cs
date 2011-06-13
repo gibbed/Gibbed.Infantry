@@ -24,9 +24,9 @@ namespace Gibbed.Infantry.FileFormats.Level
 {
     public struct Tile
     {
-        public byte A;
-        public byte B;
-        public byte C;
+        public byte BitsA;
+        public byte BitsB;
+        public byte BitsC;
 
         public bool IsBlocked
         {
@@ -35,31 +35,31 @@ namespace Gibbed.Infantry.FileFormats.Level
 
         public int Physics
         {
-            get { return this.C & 0x1F; }
+            get { return this.BitsC & 0x1F; }
             set
             {
-                this.C &= 0xE0; // ~0x1F
-                this.C |= (byte)(value & 0x1F);
+                this.BitsC &= 0xE0; // ~0x1F
+                this.BitsC |= (byte)(value & 0x1F);
             }
         }
 
         public int Vision
         {
-            get { return this.C >> 5; }
+            get { return this.BitsC >> 5; }
             set
             {
-                this.C &= 0x1F; // ~0xE0
-                this.C |= (byte)(value << 5);
+                this.BitsC &= 0x1F; // ~0xE0
+                this.BitsC |= (byte)(value << 5);
             }
         }
 
         public int TerrainLookup
         {
-			get { return (this.A & 0x7F); }
+			get { return (this.BitsA & 0x7F); }
             set
             {
-                this.A &= 0x80;
-                this.A |= (byte)(value & 0x7F);
+                this.BitsA &= 0x80;
+                this.BitsA |= (byte)(value & 0x7F);
             }
         }
     }

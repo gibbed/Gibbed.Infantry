@@ -20,18 +20,12 @@
  *    distribution.
  */
 
-using System.Runtime.InteropServices;
-
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 14*/)]
-    internal struct OldEntity
+    public enum DetailLevel
     {
-        public short X;
-        public short Y;
-        public uint BitsA;
-        public uint BitsB;
-        public byte BitsC;
-        public byte BitsD;
+        Low = 0,
+        Medium = 1,
+        High = 2,
     }
 }

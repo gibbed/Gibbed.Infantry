@@ -42,10 +42,15 @@
   <ItemGroup>
     <Compile Include="LevelFile.cs" />
     <Compile Include="Level\BlobReference.cs" />
+    <Compile Include="Level\DetailLevel.cs" />
+    <Compile Include="Level\DrawOrder.cs" />
     <Compile Include="Level\Entity.cs" />
+    <Compile Include="Level\ExtraDataMeaning.cs" />
+    <Compile Include="Level\LightColor.cs" />
     <Compile Include="Level\OldEntity.cs" />
     <Compile Include="Level\Header.cs" />
     <Compile Include="Level\Tile.cs" />
+    <Compile Include="Level\Transluency.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamHelpers.cs" />
   </ItemGroup>
