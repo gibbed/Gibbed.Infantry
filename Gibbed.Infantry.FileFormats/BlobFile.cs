@@ -33,6 +33,33 @@ namespace Gibbed.Infantry.FileFormats
         public List<Entry> Entries
             = new List<Entry>();
 
+        public void Serialize(Stream output)
+        {
+            if (this.Version < 1 || this.Version > 2)
+            {
+                throw new InvalidOperationException("unsupported blob version");
+            }
+
+            output.WriteValueU32(this.Version);
+            output.WriteValueS32(this.Entries.Count);
+
+            var nameLength = this.Version == 2 ? 32 : 14;
+
+            foreach (var entry in this.Entries)
+            {
+                var name = entry.Name;
+
+                if (name.Length + 1 > nameLength)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                output.WriteString(name.PadRight(nameLength, '\0'));
+                output.WriteValueU32((uint)entry.Offset);
+                output.WriteValueU32(entry.Size);
+            }
+        }
+
         public void Deserialize(Stream input)
         {
             this.Version = input.ReadValueU32();
