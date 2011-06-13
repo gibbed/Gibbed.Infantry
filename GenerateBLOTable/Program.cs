@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml;
+using System.Xml.XPath;
 using Gibbed.Infantry.FileFormats;
 using NDesk.Options;
 
@@ -99,6 +100,8 @@ namespace GenerateBLOTable
                     continue;
                 }
 
+                Console.WriteLine("Processing '{0}'...", Path.GetFileName(inputPath));
+
                 using (var input = File.OpenRead(inputPath))
                 {
                     var blob = new BlobFile();
@@ -106,6 +109,8 @@ namespace GenerateBLOTable
 
                     foreach (var entry in blob.Entries)
                     {
+                        Console.WriteLine("  Hashing '{0}'", entry.Name);
+
                         input.Seek(entry.Offset, SeekOrigin.Begin);
 
                         var data = new byte[entry.Size];
@@ -135,6 +140,8 @@ namespace GenerateBLOTable
                 }
             }
 
+            var custom = LoadBLOTableCustom();
+
             string outputPath;
 
             outputPath = Path.GetDirectoryName(GetExecutableName());
@@ -150,6 +157,7 @@ namespace GenerateBLOTable
                 xml.WriteStartDocument();
                 xml.WriteStartElement("resources");
 
+                xml.WriteStartElement("auto");
                 foreach (var resource in resources)
                 {
                     xml.WriteStartElement("resource");
@@ -165,10 +173,86 @@ namespace GenerateBLOTable
 
                     xml.WriteEndElement();
                 }
+                xml.WriteEndElement();
+
+                if (custom.Count > 0)
+                {
+                    xml.WriteStartElement("custom");
+                    foreach (var resource in custom)
+                    {
+                        xml.WriteStartElement("resource");
+                        xml.WriteAttributeString("hash", resource.Key);
+
+                        foreach (var location in resource.Value)
+                        {
+                            xml.WriteStartElement("source");
+                            xml.WriteAttributeString("filename", location.FileName);
+                            xml.WriteAttributeString("id", location.Id);
+                            xml.WriteEndElement();
+                        }
+
+                        xml.WriteEndElement();
+                    }
+                    xml.WriteEndElement();
+                }
 
                 xml.WriteEndElement();
                 xml.WriteEndDocument();
             }
+        }
+
+        private static SortedDictionary<string, List<ResourceLocation>> LoadBLOTableCustom()
+        {
+            var resources = new SortedDictionary<string, List<ResourceLocation>>();
+
+            string inputPath;
+            inputPath = Path.GetDirectoryName(GetExecutableName());
+            inputPath = Path.Combine(inputPath, "blotable.xml");
+
+            if (File.Exists(inputPath) == false)
+            {
+                return resources;
+            }
+
+            using (var input = File.OpenRead(inputPath))
+            {
+                var doc = new XPathDocument(input);
+                
+                var nav = doc.CreateNavigator();
+
+                var nodes = nav.Select("/resources/custom/resource");
+                while (nodes.MoveNext() == true)
+                {
+                    var hash = nodes.Current.GetAttribute("hash", "");
+
+                    if (resources.ContainsKey(hash) == true)
+                    {
+                        continue;
+                    }
+
+                    var source = nodes.Current.SelectSingleNode("source");
+                    if (source == null)
+                    {
+                        continue;
+                    }
+
+                    var filename = source.GetAttribute("filename", "");
+                    var id = source.GetAttribute("id", "");
+
+                    if (resources.ContainsKey(hash) == false)
+                    {
+                        resources[hash] = new List<ResourceLocation>();
+                    }
+
+                    resources[hash].Add(new ResourceLocation()
+                        {
+                            FileName = filename,
+                            Id = id,
+                        });
+                }
+            }
+
+            return resources;
         }
     }
 }

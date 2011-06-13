@@ -112,7 +112,7 @@ namespace Gibbed.Infantry.DecompileLVL
 
                 var resources = resourceMapping == true ?
                     LoadBLOTable() :
-                    new Dictionary<string, string>();
+                    new SortedDictionary<string, string>();
 
                 if (File.Exists(lvbPath) == false)
                 {
@@ -393,9 +393,9 @@ namespace Gibbed.Infantry.DecompileLVL
             }
         }
 
-        private static Dictionary<string, string> LoadBLOTable()
+        private static SortedDictionary<string, string> LoadBLOTable()
         {
-            var resources = new Dictionary<string, string>();
+            var resources = new SortedDictionary<string, string>();
 
             string inputPath;
             inputPath = Path.GetDirectoryName(GetExecutableName());
@@ -411,7 +411,7 @@ namespace Gibbed.Infantry.DecompileLVL
                 var doc = new XPathDocument(input);
                 var nav = doc.CreateNavigator();
 
-                var nodes = nav.Select("/resources/resource");
+                var nodes = nav.Select("/resources/*/resource");
                 while (nodes.MoveNext() == true)
                 {
                     var hash = nodes.Current.GetAttribute("hash", "");
