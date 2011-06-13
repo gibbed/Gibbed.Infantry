@@ -20,14 +20,68 @@
  *    distribution.
  */
 
+using System;
 using System.IO;
 using Gibbed.Helpers;
 
 namespace Gibbed.Infantry.FileFormats
 {
-    internal static class StreamHelpers
+    public static class StreamHelpers
     {
-        public static byte[] DecompressRLE(this Stream stream, int size, int count)
+        public static int WriteRLE(this Stream stream, byte[] data, int size, int count, bool encodedLengths)
+        {
+            int maxRun = encodedLengths == false ? 0xFF : 0xFFFF;
+            int totalBytes = 0;
+
+            for (int stage = 0; stage < size; stage++)
+            {
+                int offset = stage;
+
+                int left = count;
+                while (left > 0)
+                {
+                    var value = data[offset];
+                    offset += size;
+                    
+                    int repeat = 1;
+                    for (; repeat < maxRun && offset < data.Length; offset += size)
+                    {
+                        if (data[offset] != value)
+                        {
+                            break;
+                        }
+
+                        repeat++;
+                    }
+
+                    if (repeat <= 0xFF)
+                    {
+                        stream.WriteValueU8((byte)repeat);
+                        totalBytes++;
+                    }
+                    else if (encodedLengths == false)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    else
+                    {
+                        stream.WriteValueU8(0);
+                        stream.WriteValueU8((byte)((repeat >> 8) & 0xFF));
+                        stream.WriteValueU8((byte)((repeat >> 0) & 0xFF));
+                        totalBytes += 3;
+                    }
+
+                    stream.WriteValueU8(value);
+                    totalBytes++;
+
+                    left -= repeat;
+                }
+            }
+
+            return totalBytes;
+        }
+
+        public static byte[] ReadRLE(this Stream stream, int size, int count, bool encodedLengths)
         {
             var data = new byte[count * size];
 
@@ -39,7 +93,7 @@ namespace Gibbed.Infantry.FileFormats
                 while (left > 0)
                 {
                     int repeat = stream.ReadValueU8();
-                    if (repeat == 0)
+                    if (encodedLengths == true && repeat == 0)
                     {
                         repeat = stream.ReadValueU8() << 8;
                         repeat |= stream.ReadValueU8();

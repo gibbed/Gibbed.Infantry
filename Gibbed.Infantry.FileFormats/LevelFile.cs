@@ -175,7 +175,7 @@ namespace Gibbed.Infantry.FileFormats
 
             this.Tiles = new Level.Tile[this.Width * this.Height];
 
-            var tileData = input.DecompressRLE(3, this.Tiles.Length);
+            var tileData = input.ReadRLE(3, this.Tiles.Length, true);
             for (int i = 0, j = 0; i < this.Tiles.Length; i++, j += 3)
             {
                 this.Tiles[i].A = tileData[j + 0];
@@ -213,7 +213,7 @@ namespace Gibbed.Infantry.FileFormats
             else
             {
                 using (var entityData =
-                    new MemoryStream(input.DecompressRLE(14, header.EntityCount)))
+                    new MemoryStream(input.ReadRLE(14, header.EntityCount, true)))
                 {
                     for (int i = 0; i < header.EntityCount; i++)
                     {

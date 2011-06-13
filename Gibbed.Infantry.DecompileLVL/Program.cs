@@ -135,36 +135,28 @@ namespace Gibbed.Infantry.DecompileLVL
                         output.WriteStructure(reference);
                     }
 
-                    var tiles = new byte[level.Width * level.Height * 8];
+                    var tiles = new byte[level.Width * level.Height * 4];
                     int offset = 0;
 
-                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    // TODO: implement real RLE compression
+
+                    for (int i = 0, j = 0; i < level.Tiles.Length; i++, j += 4)
                     {
-                        tiles[offset + 0] = 1;
-                        tiles[offset + 1] = level.Tiles[i].A;
-                        tiles[offset + 1] &= 0x7F;
+                        tiles[j + 0] = level.Tiles[i].A;
+                        tiles[j + 0] &= 0x7F;
+                        tiles[j + 1] = 0;
+                        tiles[j + 2] = level.Tiles[i].C;
+                        tiles[j + 3] = level.Tiles[i].B;
                     }
 
-                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    using (var rle = new MemoryStream())
                     {
-                        tiles[offset + 0] = 1;
-                        tiles[offset + 1] = 0;
-                    }
+                        rle.WriteRLE(tiles, 4, level.Tiles.Length, false);
+                        rle.Position = 0;
 
-                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
-                    {
-                        tiles[offset + 0] = 1;
-                        tiles[offset + 1] = level.Tiles[i].C;
+                        output.WriteValueS32((int)rle.Length);
+                        output.WriteFromStream(rle, rle.Length);
                     }
-
-                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
-                    {
-                        tiles[offset + 0] = 1;
-                        tiles[offset + 1] = level.Tiles[i].B;
-                    }
-
-                    output.WriteValueS32(tiles.Length);
-                    output.Write(tiles, 0, tiles.Length);
 
                     for (int i = 0; i < level.Entities.Count; i++)
                     {
