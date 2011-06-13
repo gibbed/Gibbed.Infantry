@@ -22,7 +22,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Gibbed.Infantry.DecompileLVL.Map
+namespace Gibbed.Infantry.FileFormats.Map
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
     public struct BlobReference

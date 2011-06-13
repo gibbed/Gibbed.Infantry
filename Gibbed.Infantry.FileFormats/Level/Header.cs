@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 namespace Gibbed.Infantry.FileFormats.Level
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 5152*/)]
-    internal struct Header
+    public struct Header
     {
         public int Version;
         

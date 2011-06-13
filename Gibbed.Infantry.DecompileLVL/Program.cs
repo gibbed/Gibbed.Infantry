@@ -29,6 +29,7 @@ using System.Xml.XPath;
 using Gibbed.Helpers;
 using Gibbed.Infantry.FileFormats;
 using NDesk.Options;
+using Map = Gibbed.Infantry.FileFormats.Map;
 
 namespace Gibbed.Infantry.DecompileLVL
 {
@@ -44,6 +45,7 @@ namespace Gibbed.Infantry.DecompileLVL
             bool showHelp = false;
             bool resourceMapping = true;
             bool generateBlobs = false;
+            bool stripDumbBlobs = false;
 
             OptionSet options = new OptionSet()
             {
@@ -56,6 +58,11 @@ namespace Gibbed.Infantry.DecompileLVL
                     "g|generate-blobs",
                     "generate blobs for older level files when resource mapping fails", 
                     v => generateBlobs = v != null
+                },
+                {
+                    "s|strip-lvb-blob-references",
+                    "strip references to .lvb.blo blob files",
+                    v => stripDumbBlobs = v != null
                 },
                 {
                     "h|help",
@@ -97,6 +104,31 @@ namespace Gibbed.Infantry.DecompileLVL
             using (var input = File.OpenRead(inputPath))
             {
                 level.Deserialize(input);
+            }
+
+            if (stripDumbBlobs == true)
+            {
+                for (int i = 0; i < level.Floors.Count; i++)
+                {
+                    var floor = level.Floors[i];
+                    if (floor.FileName != null &&
+                        floor.FileName.EndsWith(".lvb.blo") == true)
+                    {
+                        floor.FileName = null;
+                        level.Floors[i] = floor;
+                    }
+                }
+
+                for (int i = 0; i < level.Objects.Count; i++)
+                {
+                    var obj = level.Objects[i];
+                    if (obj.FileName != null &&
+                        obj.FileName.EndsWith(".lvb.blo") == true)
+                    {
+                        obj.FileName = null;
+                        level.Objects[i] = obj;
+                    }
+                }
             }
 
             var hasLevelBlob =

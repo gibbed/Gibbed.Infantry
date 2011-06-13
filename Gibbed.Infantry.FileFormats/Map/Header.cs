@@ -22,10 +22,10 @@
 
 using System.Runtime.InteropServices;
 
-namespace Gibbed.Infantry.DecompileLVL.Map
+namespace Gibbed.Infantry.FileFormats.Map
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 4168*/)]
-    internal struct Header
+    public struct Header
     {
         public int Version;
 
