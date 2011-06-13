@@ -39,8 +39,8 @@ namespace Gibbed.Infantry.FileFormats.Level
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 512)]
         public uint[] MinimapPalette;
 
-        public int ObjectXOffset;
-        public int ObjectYOffset;
+        public int EntityXOffset;
+        public int EntityYOffset;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
         public int[] TerrainIds;

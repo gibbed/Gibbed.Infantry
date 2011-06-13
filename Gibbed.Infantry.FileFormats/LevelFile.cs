@@ -32,8 +32,8 @@ namespace Gibbed.Infantry.FileFormats
         public int Width;
         public int Height;
 
-        public int ObjectXOffset;
-        public int ObjectYOffset;
+        public int EntityXOffset;
+        public int EntityYOffset;
 
         public readonly short[] PhysicsLow = new short[32];
         public readonly short[] PhysicsHigh = new short[32];
@@ -47,6 +47,8 @@ namespace Gibbed.Infantry.FileFormats
         public uint LightColorBlue;
 
         public Level.Tile[] Tiles;
+        public List<Level.BlobReference> Objects;
+        public List<Level.BlobReference> Floors;
         public List<Level.Entity> Entities;
 
         public LevelFile()
@@ -104,8 +106,8 @@ namespace Gibbed.Infantry.FileFormats
             this.Width = header.Width;
             this.Height = header.Height;
 
-            this.ObjectXOffset = header.ObjectXOffset;
-            this.ObjectYOffset = header.ObjectYOffset;
+            this.EntityXOffset = header.EntityXOffset;
+            this.EntityYOffset = header.EntityYOffset;
 
             for (int i = 0; i < header.Padding.Length; i++)
             {
@@ -136,37 +138,40 @@ namespace Gibbed.Infantry.FileFormats
                 this.SetDefaults();
             }
 
-            var objectBlobs = new Level.BlobReference[header.ObjectCount];
-            var floorBlobs = new Level.BlobReference[header.FloorCount];
-
-            for (int i = 0; i < objectBlobs.Length; i++)
+            var objects = new Level.BlobReference[header.ObjectCount];
+            for (int i = 0; i < objects.Length; i++)
             {
                 if (header.Version >= 6)
                 {
 
-                    objectBlobs[i] = input.ReadStructure<Level.BlobReference>();
+                    objects[i] = input.ReadStructure<Level.BlobReference>();
                 }
                 else
                 {
-                    objectBlobs[i] = new Level.BlobReference();
-                    objectBlobs[i].FileName = null;
-                    objectBlobs[i].Id = string.Format("o{0}.cfs", i);
+                    objects[i] = new Level.BlobReference();
+                    objects[i].FileName = null;
+                    objects[i].Id = string.Format("o{0}.cfs", i);
                 }
             }
+            this.Objects = new List<Level.BlobReference>();
+            this.Objects.AddRange(objects);
 
-            for (int i = 0; i < floorBlobs.Length; i++)
+            var floors = new Level.BlobReference[header.FloorCount];
+            for (int i = 0; i < floors.Length; i++)
             {
                 if (header.Version >= 6)
                 {
-                    floorBlobs[i] = input.ReadStructure<Level.BlobReference>();
+                    floors[i] = input.ReadStructure<Level.BlobReference>();
                 }
                 else
                 {
-                    floorBlobs[i] = new Level.BlobReference();
-                    floorBlobs[i].FileName = null;
-                    floorBlobs[i].Id = string.Format("f{0}.cfs", i);
+                    floors[i] = new Level.BlobReference();
+                    floors[i].FileName = null;
+                    floors[i].Id = string.Format("f{0}.cfs", i);
                 }
             }
+            this.Floors = new List<Level.BlobReference>();
+            this.Floors.AddRange(floors);
 
             this.Tiles = new Level.Tile[this.Width * this.Height];
 
