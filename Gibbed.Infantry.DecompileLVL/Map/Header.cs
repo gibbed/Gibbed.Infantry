@@ -22,28 +22,20 @@
 
 using System.Runtime.InteropServices;
 
-namespace Gibbed.Infantry.FileFormats.Level
+namespace Gibbed.Infantry.DecompileLVL.Map
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 5152*/)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 4168*/)]
     internal struct Header
     {
         public int Version;
-        
+
         public int Width;
         public int Height;
-        
-        public int EntityCount;
-        public int FloorCount;
-        public int ObjectCount;
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 512)]
-        public uint[] MinimapPalette;
 
         public int OffsetX;
         public int OffsetY;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
-        public int[] TerrainIds;
+        public int EntityCount;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         public short[] PhysicsLow;
@@ -56,7 +48,7 @@ namespace Gibbed.Infantry.FileFormats.Level
         public uint LightColorGreen;
         public uint LightColorBlue;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2416)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4000)]
         public byte[] Padding;
     }
 }

@@ -45,11 +45,13 @@ namespace Gibbed.Infantry.FileFormats
                         repeat |= stream.ReadValueU8();
                     }
 
-                    var value = stream.ReadValueU8();
+                    left -= repeat;
 
-                    for (left -= repeat; repeat > 0; offset += size, repeat--)
+                    var value = stream.ReadValueU8();
+                    for (; repeat > 0; offset += size)
                     {
                         data[offset] = value;
+                        repeat--;
                     }
                 }
             }

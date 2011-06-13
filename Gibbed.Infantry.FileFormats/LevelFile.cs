@@ -32,8 +32,8 @@ namespace Gibbed.Infantry.FileFormats
         public int Width;
         public int Height;
 
-        public int EntityXOffset;
-        public int EntityYOffset;
+        public int OffsetX;
+        public int OffsetY;
 
         public readonly short[] PhysicsLow = new short[32];
         public readonly short[] PhysicsHigh = new short[32];
@@ -106,8 +106,8 @@ namespace Gibbed.Infantry.FileFormats
             this.Width = header.Width;
             this.Height = header.Height;
 
-            this.EntityXOffset = header.EntityXOffset;
-            this.EntityYOffset = header.EntityYOffset;
+            this.OffsetX = header.OffsetX;
+            this.OffsetY = header.OffsetY;
 
             for (int i = 0; i < header.Padding.Length; i++)
             {

@@ -23,8 +23,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Gibbed.Helpers;
 using Gibbed.Infantry.FileFormats;
 using NDesk.Options;
+
+/* TODO: for old levels that use .lvb for resources,
+ * detect object/floor .blos they really came from. */
 
 namespace Gibbed.Infantry.DecompileLVL
 {
@@ -73,13 +77,109 @@ namespace Gibbed.Infantry.DecompileLVL
 
             string inputPath = extras[0];
             string outputPath = extras.Count > 1 ? extras[1] : Path.ChangeExtension(inputPath, ".map");
+            string lvbPath = Path.ChangeExtension(Path.GetFileName(inputPath), ".lvb");
 
             using (var input = File.OpenRead(inputPath))
             {
                 var level = new LevelFile();
                 level.Deserialize(input);
 
-                throw new NotImplementedException();
+                using (var output = File.Create(outputPath))
+                {
+                    var header = new Map.Header();
+
+                    header.Version = 9;
+                    header.Width = level.Width;
+                    header.Height = level.Height;
+                    header.OffsetX = level.OffsetX;
+                    header.OffsetY = level.OffsetY;
+                    header.EntityCount = level.Entities.Count;
+
+                    header.PhysicsLow = new short[32];
+                    Array.Copy(level.PhysicsLow, header.PhysicsLow, level.PhysicsLow.Length);
+                    header.PhysicsHigh = new short[32];
+                    Array.Copy(level.PhysicsHigh, header.PhysicsHigh, level.PhysicsHigh.Length);
+
+                    header.LightColorWhite = level.LightColorWhite;
+                    header.LightColorRed = level.LightColorRed;
+                    header.LightColorGreen = level.LightColorGreen;
+                    header.LightColorBlue = level.LightColorBlue;
+
+                    output.WriteStructure(header);
+
+                    for (int i = 0; i < 8192; i++)
+                    {
+                        if (i < level.TerrainIds.Length)
+                        {
+                            output.WriteValueU8((byte)level.TerrainIds[i]);
+                        }
+                        else
+                        {
+                            output.WriteValueU8(0);
+                        }
+                    }
+
+                    for (int i = 0; i < 2048; i++)
+                    {
+                        var reference = new Map.BlobReference();
+
+                        if (i < level.Floors.Count)
+                        {
+                            var floor = level.Floors[i];
+
+                            reference.Path = string.Format("{0},{1}",
+                                floor.FileName ?? lvbPath,
+                                floor.Id);
+                        }
+
+                        output.WriteStructure(reference);
+                    }
+
+                    var tiles = new byte[level.Width * level.Height * 8];
+                    int offset = 0;
+
+                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    {
+                        tiles[offset + 0] = 1;
+                        tiles[offset + 1] = level.Tiles[i].A;
+                        tiles[offset + 1] &= 0x7F;
+                    }
+
+                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    {
+                        tiles[offset + 0] = 1;
+                        tiles[offset + 1] = 0;
+                    }
+
+                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    {
+                        tiles[offset + 0] = 1;
+                        tiles[offset + 1] = level.Tiles[i].C;
+                    }
+
+                    for (int i = 0; i < level.Tiles.Length; i++, offset += 2)
+                    {
+                        tiles[offset + 0] = 1;
+                        tiles[offset + 1] = level.Tiles[i].B;
+                    }
+
+                    output.WriteValueS32(tiles.Length);
+                    output.Write(tiles, 0, tiles.Length);
+
+                    for (int i = 0; i < level.Entities.Count; i++)
+                    {
+                        output.WriteStructure(level.Entities[i]);
+
+                        var obj = level.Objects[level.Entities[i].ObjectId];
+
+                        var reference = new Map.BlobReference();
+                        reference.Path = string.Format("{0},{1}",
+                                obj.FileName ?? lvbPath,
+                                obj.Id);
+
+                        output.WriteStructure(reference);
+                    }
+                }
             }
         }
     }

@@ -22,26 +22,12 @@
 
 using System.Runtime.InteropServices;
 
-namespace Gibbed.Infantry.FileFormats.Level
+namespace Gibbed.Infantry.DecompileLVL.Map
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 17*/)]
-    public struct Entity
+    [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
+    public struct BlobReference
     {
-        public short X;
-        public short Y;
-        public uint U04;
-        public uint U08;
-        public uint U0C;
-        public byte U10;
-
-        public int ObjectId
-        {
-            get { return (int)(this.U04 & 0x1FFF); }
-            set
-            {
-                this.U04 &= ~0x1FFFu;
-                this.U04 |= (uint)(value & 0x1FFF);
-            }
-        }
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+        public string Path;
     }
 }
