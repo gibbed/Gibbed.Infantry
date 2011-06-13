@@ -12,6 +12,9 @@
   <resource hash="00182521242bcd2d51dcd53af977f778">
     <source filename="o_newbb.blo" id="bb_skel_chest_blue.cfs" />
   </resource>
+  <resource hash="001847f992de61859be5f3265132621f">
+    <source filename="o_underwater.blo" id="scuff.cfs" />
+  </resource>
   <resource hash="002da0f463366c35e2d13b68c2a3bbaf">
     <source filename="f_s-9_newfloors.blo" id="cfloor7.cfs" />
     <source filename="f_s-9_newfloors3.blo" id="cfloor7.cfs" />
@@ -229,6 +232,9 @@
   </resource>
   <resource hash="091268a86ec0d13265208ebb74810dcc">
     <source filename="f_mars_terrain.blo" id="mars_ground01.cfs" />
+  </resource>
+  <resource hash="0935ef40cfcaf4b10f00fcc6bae0f4e3">
+    <source filename="o_underwater.blo" id="mountains.cfs" />
   </resource>
   <resource hash="0955ba090a715a02e1700c12ed3376e5">
     <source filename="o_boomball.blo" id="bb_wall003a.cfs" />
@@ -640,6 +646,9 @@
   <resource hash="18cbd0ad542f5d7e163584177583c536">
     <source filename="f_patterns.blo" id="trenchfloor4.cfs" />
   </resource>
+  <resource hash="18f7130c6c834ec39a08b85cb44bd95b">
+    <source filename="o_underwater.blo" id="pipes3.cfs" />
+  </resource>
   <resource hash="1901734307eedb4770533ef7907631af">
     <source filename="o_space.blo" id="rockf.cfs" />
   </resource>
@@ -746,6 +755,9 @@
   <resource hash="1cd458851b894eea9aa5933866271474">
     <source filename="o_tfcity.blo" id="billboard11.cfs" />
   </resource>
+  <resource hash="1cd93ba641bc00d9cdb7e88091bfa800">
+    <source filename="o_underwater.blo" id="pipes1.cfs" />
+  </resource>
   <resource hash="1cff5e8eb01ec66c3e1f791e3d6383d7">
     <source filename="o_igblawards.blo" id="ironmanaward.cfs" />
   </resource>
@@ -820,6 +832,9 @@
   <resource hash="1f667a552e3409f891ee91a255939fb4">
     <source filename="o_firtrees.blo" id="newtreed.cfs" />
   </resource>
+  <resource hash="1fa353e747d7b6d6a49657ddde8f0dd7">
+    <source filename="o_underwater.blo" id="natural.cfs" />
+  </resource>
   <resource hash="1fb5d1c0ec75e846d242145a9d827978">
     <source filename="o_corpse.blo" id="corpse1.cfs" />
   </resource>
@@ -835,6 +850,9 @@
   <resource hash="20b16a05b60168a72b67996850acc2e7">
     <source filename="f_newterrain.blo" id="s200n801.cfs" />
   </resource>
+  <resource hash="20b3d2b0d4696322b4ae96edc341bcba">
+    <source filename="o_underwater.blo" id="reactor0.cfs" />
+  </resource>
   <resource hash="20b91cbb650e870bbfff90ab63049f73">
     <source filename="o_onesided.blo" id="obj00157.cfs" />
   </resource>
@@ -843,6 +861,9 @@
   </resource>
   <resource hash="20fd4efa3ff0ab05c7b75515c71ff408">
     <source filename="o_cm.blo" id="dot.cfs" />
+  </resource>
+  <resource hash="213ffec27f5f380b11bb294020a04623">
+    <source filename="o_underwater.blo" id="seaweed.cfs" />
   </resource>
   <resource hash="2151ec83347e4c768c4a155fb28937ad">
     <source filename="o_cm.blo" id="bquotation.cfs" />
@@ -1071,6 +1092,9 @@
   </resource>
   <resource hash="2c62017b3a83e7823f9f6f8606a7ad3d">
     <source filename="o_cm.blo" id="b.cfs" />
+  </resource>
+  <resource hash="2c66d5302651f746e8fe4ea0e0e41534">
+    <source filename="o_underwater.blo" id="fog.cfs" />
   </resource>
   <resource hash="2c6fb8e65187af87a52f00d0d64c8759">
     <source filename="f_newterrain.blo" id="d100m800.cfs" />
@@ -1404,6 +1428,9 @@
   </resource>
   <resource hash="399bf2a09345d11782b07269b49cc157">
     <source filename="o_boomball.blo" id="bb_stand003b.cfs" />
+  </resource>
+  <resource hash="3a33cafa4396dccca175c298ae9a3986">
+    <source filename="o_underwater.blo" id="reactor2.cfs" />
   </resource>
   <resource hash="3a589516fdb1d79f341d297e5f5dce07">
     <source filename="o_eolenvironment.blo" id="rockbounceb.wav" />
@@ -1995,6 +2022,9 @@
   </resource>
   <resource hash="551087df2435018cc1de91084553cb32">
     <source filename="o_newbb.blo" id="bb_edge003.cfs" />
+  </resource>
+  <resource hash="552cfdfa31fd9a7a87974e26683cfcd5">
+    <source filename="o_underwater.blo" id="reactor1.cfs" />
   </resource>
   <resource hash="555bd2db5dab039b5e33c79880ee14e3">
     <source filename="f_patterns.blo" id="floor grid red.cfs" />
@@ -2651,6 +2681,9 @@
   <resource hash="731ee5880ca13a3608c2ab4205afa4b7">
     <source filename="f_eolfloors.blo" id="39.cfs" />
   </resource>
+  <resource hash="732d1f2810bf29b49ec944515e34d73b">
+    <source filename="o_underwater.blo" id="lights1.cfs" />
+  </resource>
   <resource hash="732da5ea2bb7930f207cd77ac0431300">
     <source filename="o_trafficlight.blo" id="trafficlightred.cfs" />
   </resource>
@@ -2729,6 +2762,9 @@
   </resource>
   <resource hash="76212319130490dd8b87cab03ff072fc">
     <source filename="o_window.blo" id="window.cfs" />
+  </resource>
+  <resource hash="76305f1036ae863c83bd6176087e613b">
+    <source filename="o_underwater.blo" id="pipes0.cfs" />
   </resource>
   <resource hash="7647953a2f193e73fc301e573f32e7ce">
     <source filename="o_stadium.blo" id="playwalla.cfs" />
@@ -2870,6 +2906,9 @@
   </resource>
   <resource hash="7aede6e9fefe1a413f188da2f8bf0e47">
     <source filename="f_s-9_newfloors4.blo" id="cement2.cfs" />
+  </resource>
+  <resource hash="7b352b866395f355311edd2c6e66a63b">
+    <source filename="o_underwater.blo" id="seabed.cfs" />
   </resource>
   <resource hash="7b55e2a93341e930d95894385d62ddf2">
     <source filename="f_s-9_newfloors4.blo" id="tilediamond.cfs" />
@@ -4100,6 +4139,9 @@
   <resource hash="af0642e580e0be0a08a3afded2c96222">
     <source filename="o_tanks.blo" id="obj00260.cfs" />
   </resource>
+  <resource hash="af226200b36bae7ce41c26faee28b67d">
+    <source filename="o_underwater.blo" id="pole.cfs" />
+  </resource>
   <resource hash="af27df13cf25dda4dcc34b44bdc2135f">
     <source filename="f_eolfloors.blo" id="9.cfs" />
   </resource>
@@ -4286,6 +4328,9 @@
   <resource hash="b74e1911071ed26556d55426577e3f15">
     <source filename="o_space.blo" id="obj00016.cfs" />
   </resource>
+  <resource hash="b79c68297040d512f360f0999bb662f8">
+    <source filename="o_underwater.blo" id="radardish.cfs" />
+  </resource>
   <resource hash="b7e85cb4627d50187ebf0963d3f464bb">
     <source filename="f_colors.blo" id="color10.cfs" />
   </resource>
@@ -4300,6 +4345,9 @@
   </resource>
   <resource hash="b85983af6d6264571987f6dea46d679a">
     <source filename="o_sav.blo" id="chainlinkl.cfs" />
+  </resource>
+  <resource hash="b85a289d5e39204164e523ca4e8740a4">
+    <source filename="o_underwater.blo" id="cliffs.cfs" />
   </resource>
   <resource hash="b889181a133126747e5d874a784702c7">
     <source filename="f_newterrain.blo" id="s500m800.cfs" />
@@ -4344,6 +4392,9 @@
   </resource>
   <resource hash="b9c19389055bf05780d925ef3a26f9a4">
     <source filename="o_cliffterrain.blo" id="craterlightb.cfs" />
+  </resource>
+  <resource hash="b9f3996f9f807fc09cd3bec419c22c46">
+    <source filename="o_underwater.blo" id="pipes4.cfs" />
   </resource>
   <resource hash="ba3d2795a6a0f455b970daa88d0d81e1">
     <source filename="o_cm.blo" id="derrick2.cfs" />
@@ -4513,6 +4564,9 @@
   <resource hash="c081c67d07db6d4aed62ba41f6114fbd">
     <source filename="f_newterrain.blo" id="d000n801.cfs" />
   </resource>
+  <resource hash="c089dd284f56344fce1ab68597c18f37">
+    <source filename="o_underwater.blo" id="plate1.cfs" />
+  </resource>
   <resource hash="c09e1d3410eba54ad412b36a863a8a5f">
     <source filename="o_boomball.blo" id="bb_walk003b.cfs" />
   </resource>
@@ -4579,6 +4633,9 @@
   </resource>
   <resource hash="c2bcc5b23b4fb9d6a8460e04b667a7e0">
     <source filename="f_eolfloors.blo" id="20.cfs" />
+  </resource>
+  <resource hash="c2c600f93a7639df4118347af1252017">
+    <source filename="o_underwater.blo" id="pylon.cfs" />
   </resource>
   <resource hash="c2e56f50b1f8267d27457f24e1c2ac13">
     <source filename="o_mars_terrain.blo" id="s2r06.cfs" />
@@ -4816,6 +4873,9 @@
   </resource>
   <resource hash="cc899f5ffc32337c84cbf1f79255c6c0">
     <source filename="o_ca_subway.blo" id="subwaydownnoshadow0006.cfs" />
+  </resource>
+  <resource hash="cc8fa80a799c28b91fe7e6e81945b90a">
+    <source filename="o_underwater.blo" id="pipes2.cfs" />
   </resource>
   <resource hash="cca95484433d42960af89b8ed0fe1603">
     <source filename="f_newterrain.blo" id="b000n800.cfs" />
@@ -5248,6 +5308,9 @@
   <resource hash="dfdc0a1e5c1de555e9cbaa58c9b8916f">
     <source filename="o_atlas.blo" id="atlasflying.cfs" />
   </resource>
+  <resource hash="dff509877439d7a6e88266e70f889f30">
+    <source filename="o_underwater.blo" id="plate0.cfs" />
+  </resource>
   <resource hash="dff5a7d4e514da26fd0ef74a4ae6cf58">
     <source filename="o_boomball.blo" id="bb_edge005.cfs" />
   </resource>
@@ -5355,6 +5418,9 @@
   </resource>
   <resource hash="e438c7f3f9f2a9bf6a76d85353a75a33">
     <source filename="o_newbb.blo" id="bb_shadows01.cfs" />
+  </resource>
+  <resource hash="e4d36dc1ae9a2ec41c59e11db304af3c">
+    <source filename="o_underwater.blo" id="lights0.cfs" />
   </resource>
   <resource hash="e4ef16c88519821da398e9407c85383a">
     <source filename="o_cm.blo" id="ww.cfs" />
@@ -5555,6 +5621,9 @@
   </resource>
   <resource hash="f01ea596bd8b0f32bbe2dc85544e1c9d">
     <source filename="f_mars_terrain.blo" id="mars_combo03.cfs" />
+  </resource>
+  <resource hash="f023cc426c952fc6335a077f22191ddd">
+    <source filename="o_underwater.blo" id="trees.cfs" />
   </resource>
   <resource hash="f02a83f98b3fd5837dbd18052fe9f623">
     <source filename="f_legacy.blo" id="flr01083.cfs" />
@@ -5950,5 +6019,16 @@
   </resource>
   <resource hash="ffe1f401d5c961e214a61d5e1ea3937b">
     <source filename="o_bodypart.blo" id="torsostill.cfs" />
+  </resource>
+  
+  <!-- from old underwater.lvl -->
+  <resource hash="2f627d013d47daa7dae91c1710d2159c">
+    <source filename="f_sand.blo" id="flr00503.cfs" />
+  </resource>
+  <resource hash="4a9d5cee162df6ebfd9fccea4793430e">
+    <source filename="f_sand.blo" id="flr00502.cfs" />
+  </resource>
+  <resource hash="715df9c34d7045c16a2f142b609600de">
+    <source filename="f_default.blo" id="default.cfs" />
   </resource>
 </resources>
