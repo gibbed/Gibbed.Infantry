@@ -138,8 +138,6 @@ namespace Gibbed.Infantry.DecompileLVL
                     var tiles = new byte[level.Width * level.Height * 4];
                     int offset = 0;
 
-                    // TODO: implement real RLE compression
-
                     for (int i = 0, j = 0; i < level.Tiles.Length; i++, j += 4)
                     {
                         tiles[j + 0] = level.Tiles[i].A;
