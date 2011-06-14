@@ -33,8 +33,8 @@ namespace Gibbed.Infantry.FileFormats.Sprite
         public ushort Height;
         public ushort RowCount;
         public ushort ColumnCount;
-        public ushort ShadowCount;
         public ushort LightCount;
+        public ushort ShadowCount;
         public ushort UserDataSize;
         public byte CompressionFlags;
         public byte MaxSolidIndex;

@@ -90,14 +90,42 @@ namespace Gibbed.Infantry.DecompileCFS
                 PixelFormat.Format8bppIndexed);
 
             var palette = bitmap.Palette;
-            for (int i = 0; i < sprite.Palette.Length; i++)
+            var shadowIndex = 256 - sprite.ShadowCount;
+            var lightIndex = shadowIndex - sprite.LightCount;
+
+            for (int i = 0; i < 256; i++)
             {
                 var color = sprite.Palette[i];
-                palette.Entries[i] = Color.FromArgb(
-                    i == 0 ? 0 : 255,/*(int)((color >> 24) & 0xFF),*/
-                    (int)((color >> 16) & 0xFF),
-                    (int)((color >> 8) & 0xFF),
-                    (int)((color >> 0) & 0xFF));
+                
+                var r = (int)((color >> 16) & 0xFF);
+                var g = (int)((color >> 8) & 0xFF);
+                var b = (int)((color >> 0) & 0xFF);
+                //var a = (int)((color >> 24) & 0xFF);
+                
+                int a;
+                
+                if (i == 0)
+                {
+                    a = 0;
+                }
+                else if (sprite.ShadowCount > 0 && i >= shadowIndex)
+                {
+                    a = 64;
+                }
+                else if (sprite.LightCount > 0 && i >= lightIndex)
+                {
+                    a = 192;
+                }
+                else if (i > sprite.MaxSolidIndex)
+                {
+                    a = 0;
+                }
+                else
+                {
+                    a = 255;
+                }
+
+                palette.Entries[i] = Color.FromArgb(a, r, g, b);
             }
             bitmap.Palette = palette;
             
