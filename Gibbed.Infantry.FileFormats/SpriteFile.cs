@@ -46,6 +46,7 @@ namespace Gibbed.Infantry.FileFormats
         public byte SortTransform;
         public byte UserPaletteStart;
         public byte UserPalette;
+        public Sprite.CompressionFlags CompressionFlags;
 
         public uint[] Palette = new uint[256];
         public byte[] UserData;
@@ -149,6 +150,7 @@ namespace Gibbed.Infantry.FileFormats
             this.ShadowCount = header.ShadowCount;
             this.LightCount = header.LightCount;
             this.MaxSolidIndex = header.MaxSolidIndex;
+            this.CompressionFlags = header.CompressionFlags;
 
             for (int i = 0; i < this.Palette.Length; i++)
             {
