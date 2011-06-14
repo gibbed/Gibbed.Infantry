@@ -85,8 +85,12 @@ namespace GenerateSpaceMap
 
             var templates = LoadEntities();
 
-            const int width = 1024;
-            const int height = 1024;
+            const int width = 500;
+            const int height = 500;
+            const int cx = width / 2;
+            const int cy = height / 2;
+            var radius = (int)((double)Math.Min(width, height) / 2.0);
+            var range = (double)Math.Min(width, height) / 2.5;
 
             var rng = new MersenneTwister();
             var noise = PerlinNoise.Generate(
@@ -101,6 +105,13 @@ namespace GenerateSpaceMap
             {
                 for (int y = 8; y < height - 8; y++)
                 {
+                    var distance = GetDistance(cx, cy, x, y);
+                    if (distance > range &&
+                        rng.Next(100) > 2)
+                    {
+                        continue;
+                    }
+
                     var magic = noise[x, y];
 
                     if (magic >= 200)
@@ -120,8 +131,20 @@ namespace GenerateSpaceMap
                             if (template != null &&
                                 template.CanPlaceWithPhysics(x, y, physics, width, height) == true)
                             {
+                                var entity = new Entity(x, y, template);
+
+                                int speed = rng.Next(100);
+                                
+                                if (speed < 60) entity.AnimationTime = 0;
+                                else if (speed < 70) entity.AnimationTime = 100;
+                                else if (speed < 80) entity.AnimationTime = 200;
+                                else if (speed < 85) entity.AnimationTime = 250;
+                                else if (speed < 90) entity.AnimationTime = 350;
+                                else if (speed < 95) entity.AnimationTime = 400;
+                                else entity.AnimationTime = 450;
+
                                 template.BlockPhysics(x, y, physics);
-                                entities.Add(new Entity(x, y, template));
+                                entities.Add(entity);
                             }
                         }
                     }
@@ -143,8 +166,11 @@ namespace GenerateSpaceMap
                             if (template != null &&
                                 template.CanPlaceWithVision(x, y, vision, width, height) == true)
                             {
+                                var entity = new Entity(x, y, template);
+                                entity.AnimationTime = 50;
+
                                 template.BlockVision(x, y, vision);
-                                entities.Add(new Entity(x, y, template));
+                                entities.Add(entity);
                             }
                         }
                     }
@@ -276,18 +302,27 @@ namespace GenerateSpaceMap
                     output.WriteFromStream(rle, rle.Length);
                 }
 
-                foreach (var entity in entities)
+                foreach (var source in entities)
                 {
-                    var levelEntity = new Level.Entity();
-                    levelEntity.X = (short)((entity.X - entity.Template.OffsetX) * 16);
-                    levelEntity.Y = (short)((entity.Y - entity.Template.OffsetY) * 16);
-                    output.WriteStructure(levelEntity);
+                    var entity = new Level.Entity();
+                    entity.X = (short)((source.X - source.Template.OffsetX) * 16);
+                    entity.Y = (short)((source.Y - source.Template.OffsetY) * 16);
+                    entity.AnimationTime = source.AnimationTime;
+                    output.WriteStructure(entity);
 
                     var reference = new Map.BlobReference();
-                    reference.Path = string.Format("{0},{1}", entity.Template.BloName, entity.Template.CfsName);
+                    reference.Path = string.Format("{0},{1}", source.Template.BloName, source.Template.CfsName);
                     output.WriteStructure(reference);
                 }
             }
+        }
+
+        public static double GetDistance(
+            int x1, int y1, int x2, int y2)
+        {
+            return Math.Sqrt(
+                Math.Pow((float)(x2 - x1), 2) +
+                Math.Pow((float)(y2 - y1), 2));
         }
 
         private static List<TemplateEntity> LoadEntities()

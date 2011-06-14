@@ -26,6 +26,7 @@ namespace GenerateSpaceMap
     {
         public readonly int X;
         public readonly int Y;
+        public int AnimationTime;
         public TemplateEntity Template;
 
         public Entity(int x, int y, TemplateEntity template)

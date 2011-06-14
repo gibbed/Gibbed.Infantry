@@ -24,13 +24,14 @@
 	</entity>
 	<entity
 		category="asteroid"
-		x="1" y="1"
-		width="2" height="2"
+		width="4" height="4"
 		blo="o_asteroids.blo" cfs="RockC.cfs"
 		>
 		<physics>
-			11
-			11
+			0000
+			5140
+			3110
+			0320
 		</physics>
 	</entity>
 	<entity
