@@ -38,7 +38,7 @@ namespace Gibbed.Infantry.FileFormats.Sprite
         public ushort ShadowCount;
         public ushort UserDataSize;
         public ushort YSortAdjust;
-        public uint CompressionFlags;
+        public CompressionFlags CompressionFlags;
         public ushort BlitMode;
         public ushort RowMeaning;
         public ushort Unknown20;

@@ -78,7 +78,7 @@ namespace Gibbed.Infantry.FileFormats
                 header.ShadowCount = oldHeader.ShadowCount;
                 header.LightCount = oldHeader.LightCount;
                 header.UserDataSize = oldHeader.UserDataSize;
-                header.CompressionFlags = oldHeader.CompressionFlags;
+                header.CompressionFlags = (Sprite.CompressionFlags)oldHeader.CompressionFlags;
                 header.MaxSolidIndex = oldHeader.MaxSolidIndex;
                 header.DataSize = oldHeader.DataSize;
                 header.Category = oldHeader.Category;
@@ -102,7 +102,7 @@ namespace Gibbed.Infantry.FileFormats
                 header.ShadowCount = oldHeader.ShadowCount;
                 header.LightCount = oldHeader.LightCount;
                 header.UserDataSize = oldHeader.UserDataSize;
-                header.CompressionFlags = oldHeader.CompressionFlags;
+                header.CompressionFlags = (Sprite.CompressionFlags)oldHeader.CompressionFlags;
                 header.MaxSolidIndex = oldHeader.MaxSolidIndex;
                 header.DataSize = oldHeader.DataSize;
                 header.Category = oldHeader.Category;
@@ -125,9 +125,20 @@ namespace Gibbed.Infantry.FileFormats
                 header.ShadowCount = oldHeader.ShadowCount;
                 header.LightCount = oldHeader.LightCount;
                 header.UserDataSize = oldHeader.UserDataSize;
-                header.CompressionFlags = oldHeader.CompressionFlags;
+                header.CompressionFlags = (Sprite.CompressionFlags)oldHeader.CompressionFlags;
                 header.MaxSolidIndex = oldHeader.MaxSolidIndex;
                 header.DataSize = oldHeader.DataSize;
+            }
+
+            if (header.LightCount != 0 &&
+                header.LightCount != 32)
+            {
+                throw new FormatException();
+            }
+            else if (header.ShadowCount != 0 &&
+                header.ShadowCount != 8)
+            {
+                throw new FormatException();
             }
 
             this.AnimationTime = header.AnimationTime;
@@ -156,13 +167,23 @@ namespace Gibbed.Infantry.FileFormats
                 infos[i] = input.ReadStructure<Sprite.FrameInfo>();
             }
 
-            if (header.CompressionFlags != 0)
+            if (((uint)header.CompressionFlags & ~0xFFu) != 0)
             {
-                throw new NotSupportedException();
+                throw new FormatException("unknown compression flags");
             }
             else if (header.Unknown20 != 0)
             {
                 throw new NotSupportedException();
+            }
+
+            if ((header.CompressionFlags &
+                Sprite.CompressionFlags.NoCompression) != 0)
+            {
+                if ((header.CompressionFlags &
+                    ~Sprite.CompressionFlags.NoCompression) != 0)
+                {
+                    throw new FormatException("other compression flags set with NoCompression flag");
+                }
             }
 
             using (var data = input.ReadToMemoryStream(header.DataSize))
@@ -177,43 +198,81 @@ namespace Gibbed.Infantry.FileFormats
 
                     frame.X = info.X;
                     frame.Y = info.Y;
-                    frame.Width = info.Width;
-                    frame.Height = info.Height;
+                    frame.Width = Math.Abs(info.Width);
+                    frame.Height = Math.Abs(info.Height);
+                    frame.Pixels = new byte[frame.Width * frame.Height];
 
-                    var lengths = new int[info.Height];
-                    var max = 0;
-                    for (int y = 0; y < info.Height; y++)
+                    if ((header.CompressionFlags &
+                        Sprite.CompressionFlags.NoCompression) != 0)
                     {
-                        int length = data.ReadValueU8();
-                        if (length == 0xFF)
+                        // uncompressed data
+                        data.Read(frame.Pixels, 0, frame.Pixels.Length);
+                    }
+                    else
+                    {
+                        // compressed data
+
+                        var lengths = new int[frame.Height];
+                        var max = 0;
+                        for (int y = 0; y < frame.Height; y++)
                         {
-                            length = data.ReadValueU16();
+                            int length = data.ReadValueU8();
+                            if (length == 0xFF)
+                            {
+                                length = data.ReadValueU16();
+                            }
+                            lengths[y] = length;
+                            max = Math.Max(max, length);
                         }
-                        lengths[y] = length;
-                        max = Math.Max(max, length);
+
+                        var scanline = new byte[max];
+                        for (int y = 0, offset = 0; y < frame.Height; y++, offset = y * frame.Width)
+                        {
+                            var length = lengths[y];
+                            if (data.Read(scanline, 0, length) != length)
+                            {
+                                throw new FormatException();
+                            }
+
+                            for (int x = 0; x < length; )
+                            {
+                                offset += (scanline[x] >> 4) & 0xF; // transparent
+                                var literalCount = scanline[x] & 0xF;
+                                if (literalCount > 0)
+                                {
+                                    Array.Copy(scanline, x + 1, frame.Pixels, offset, literalCount);
+                                }
+                                offset += literalCount;
+                                x += 1 + literalCount;
+                            }
+                        }
                     }
 
-                    frame.Pixels = new byte[info.Width * info.Height];
-
-                    var scanline = new byte[max];
-                    for (int y = 0, offset = 0; y < info.Height; y++, offset = y * info.Width)
+                    // flip horizontal
+                    if (info.Width < 0)
                     {
-                        var length = lengths[y];
-                        if (data.Read(scanline, 0, length) != length)
+                        for (int y = 0, offset = 0; y < frame.Height; y++, offset += frame.Width)
                         {
-                            throw new FormatException();
+                            Array.Reverse(frame.Pixels, offset, frame.Width);
                         }
+                    }
 
-                        for (int x = 0; x < length; )
+                    // flip vertical
+                    if (info.Height < 0)
+                    {
+                        var scanline = new byte[frame.Height];
+
+                        for (int x = 0; x < frame.Width; x++)
                         {
-                            offset += (scanline[x] >> 4) & 0xF; // transparent
-                            var literalCount = scanline[x] & 0xF;
-                            if (literalCount > 0)
+                            for (int y = 0, offset = x; y < frame.Height; y++, offset += frame.Width)
                             {
-                                Array.Copy(scanline, x + 1, frame.Pixels, offset, literalCount);
+                                scanline[y] = frame.Pixels[offset];
                             }
-                            offset += literalCount;
-                            x += 1 + literalCount;
+
+                            for (int y = 0, offset = x; y < frame.Height; y++, offset += frame.Width)
+                            {
+                                frame.Pixels[offset] = scanline[frame.Height - 1 - y];
+                            }
                         }
                     }
                 }

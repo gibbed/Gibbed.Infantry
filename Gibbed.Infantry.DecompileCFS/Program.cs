@@ -41,9 +41,15 @@ namespace Gibbed.Infantry.DecompileCFS
         public static void Main(string[] args)
         {
             bool showHelp = false;
+            bool dontFixSpecialColors = false;
 
             OptionSet options = new OptionSet()
             {
+                {
+                    "ncf|no-color-fix",
+                    "don't fix special colors (such as shadows, lights)",
+                    v => dontFixSpecialColors = v != null
+                },
                 {
                     "h|help",
                     "show this message and exit", 
@@ -106,20 +112,39 @@ namespace Gibbed.Infantry.DecompileCFS
                 
                 if (i == 0)
                 {
+                    // transparent pixel
                     a = 0;
                 }
                 else if (sprite.ShadowCount > 0 && i >= shadowIndex)
                 {
-                    a = 64;
+                    if (dontFixSpecialColors == false)
+                    {
+                        // make shadows black+alpha
+                        a = 64 + (((i - shadowIndex) + 1) * 16);
+                        r = g = b = 0;
+                    }
+                    else
+                    {
+                        a = 255;
+                    }
                 }
                 else if (sprite.LightCount > 0 && i >= lightIndex)
                 {
-                    a = 192;
+                    if (dontFixSpecialColors == false)
+                    {
+                        // make lights white+alpha
+                        a = 64 + (((i - lightIndex) + 1) * 4);
+                        r = g = b = 255;
+                    }
+                    else
+                    {
+                        a = 255;
+                    }
                 }
-                else if (i > sprite.MaxSolidIndex)
+                /*else if (i > sprite.MaxSolidIndex)
                 {
                     a = 0;
-                }
+                }*/
                 else
                 {
                     a = 255;

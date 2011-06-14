@@ -26,8 +26,8 @@ namespace Gibbed.Infantry.FileFormats.Sprite
     {
         public ushort X;
         public ushort Y;
-        public ushort Width;
-        public ushort Height;
+        public short Width;
+        public short Height;
         public byte[] Pixels;
     }
 }

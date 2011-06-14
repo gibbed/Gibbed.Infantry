@@ -62,6 +62,7 @@
     <Compile Include="Sprite\OldHeader3.cs" />
     <Compile Include="Sprite\Header.cs" />
     <Compile Include="Sprite\OldHeader4.cs" />
+    <Compile Include="Sprite\CompressionFlags.cs" />
     <Compile Include="StreamHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
