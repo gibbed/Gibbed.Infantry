@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateBLOTable", "Generat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateSpaceMap", "GenerateSpaceMap\GenerateSpaceMap.csproj", "{C5C8FBAB-0D26-4775-A145-F4DC3F3261FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{2A532A44-7122-4954-B31E-DDDBFD8E7137}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{C5C8FBAB-0D26-4775-A145-F4DC3F3261FE}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C5C8FBAB-0D26-4775-A145-F4DC3F3261FE}.Release|x86.ActiveCfg = Release|x86
 		{C5C8FBAB-0D26-4775-A145-F4DC3F3261FE}.Release|x86.Build.0 = Release|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Debug|x86.ActiveCfg = Debug|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Debug|x86.Build.0 = Debug|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|Any CPU.ActiveCfg = Release|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|x86.ActiveCfg = Release|x86
+		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
