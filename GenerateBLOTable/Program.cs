@@ -33,9 +33,14 @@ namespace GenerateBLOTable
 {
     internal class Program
     {
+        private static string GetExecutablePath()
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        }
+
         private static string GetExecutableName()
         {
-            return Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            return Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
         public class ResourceLocation
@@ -71,7 +76,7 @@ namespace GenerateBLOTable
                 return;
             }
 
-            if (extras.Count < 0 || extras.Count > 21|| showHelp == true)
+            if (extras.Count < 0 || extras.Count > 1|| showHelp == true)
             {
                 Console.WriteLine("Usage: {0} [OPTIONS]+ [input_directory]", GetExecutableName());
                 Console.WriteLine();
@@ -144,7 +149,7 @@ namespace GenerateBLOTable
 
             string outputPath;
 
-            outputPath = Path.GetDirectoryName(GetExecutableName());
+            outputPath = Path.GetDirectoryName(GetExecutablePath());
             outputPath = Path.Combine(outputPath, "blotable.xml");
 
             var settings = new XmlWriterSettings()
@@ -206,7 +211,7 @@ namespace GenerateBLOTable
             var resources = new SortedDictionary<string, List<ResourceLocation>>();
 
             string inputPath;
-            inputPath = Path.GetDirectoryName(GetExecutableName());
+            inputPath = Path.GetDirectoryName(GetExecutablePath());
             inputPath = Path.Combine(inputPath, "blotable.xml");
 
             if (File.Exists(inputPath) == false)

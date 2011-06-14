@@ -35,9 +35,14 @@ namespace Gibbed.Infantry.DecompileLVL
 {
     internal class Program
     {
+        private static string GetExecutablePath()
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        }
+
         private static string GetExecutableName()
         {
-            return Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            return Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
         public static void Main(string[] args)
@@ -430,7 +435,7 @@ namespace Gibbed.Infantry.DecompileLVL
             var resources = new SortedDictionary<string, string>();
 
             string inputPath;
-            inputPath = Path.GetDirectoryName(GetExecutableName());
+            inputPath = Path.GetDirectoryName(GetExecutablePath());
             inputPath = Path.Combine(inputPath, "blotable.xml");
 
             if (File.Exists(inputPath) == false)

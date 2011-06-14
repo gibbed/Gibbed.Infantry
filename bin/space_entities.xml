@@ -1,0 +1,209 @@
+<entities>
+	<entity
+		category="asteroid"
+		width="4" height="4"
+		blo="o_asteroids.blo" cfs="RockA.cfs"
+		>
+		<physics>
+			5114
+			1111
+			1111
+			3112
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="3" height="3"
+		blo="o_asteroids.blo" cfs="RockB.cfs"
+		>
+		<physics>
+			514
+			111
+			312
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		x="1" y="1"
+		width="2" height="2"
+		blo="o_asteroids.blo" cfs="RockC.cfs"
+		>
+		<physics>
+			11
+			11
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="3" height="3"
+		blo="o_asteroids.blo" cfs="RockD.cfs"
+		>
+		<physics>
+			514
+			111
+			312
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="1" height="1"
+		blo="o_asteroids.blo" cfs="RockE.cfs"
+		>
+		<physics>
+			1
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="4" height="4"
+		blo="o_asteroids.blo" cfs="RockF.cfs"
+		>
+		<physics>
+			5114
+			1111
+			1111
+			3112
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="3" height="3"
+		blo="o_asteroids.blo" cfs="RockG.cfs"
+		>
+		<physics>
+			514
+			111
+			312
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="2" height="2"
+		blo="o_asteroids.blo" cfs="RockH.cfs"
+		>
+		<physics>
+			54
+			32
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		width="1" height="1"
+		blo="o_asteroids.blo" cfs="RockI.cfs"
+		>
+		<physics>
+			1
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		x="3" y="3"
+		width="2" height="2"
+		blo="o_space.blo" cfs="AsteroidB.cfs"
+		>
+		<physics>
+			11
+			11
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		x="2" y="2"
+		width="4" height="4"
+		blo="o_space.blo" cfs="AsteroidD.cfs"
+		>
+		<physics>
+			5114
+			1111
+			1111
+			3112
+		</physics>
+	</entity>
+	<entity
+		category="asteroid"
+		x="2" y="2"
+		width="4" height="4"
+		blo="o_space.blo" cfs="BigAsteroidB.cfs"
+		>
+		<physics>
+			5114
+			1111
+			1111
+			3112
+		</physics>
+	</entity>
+	<entity
+		category="nebula"
+		width="8" height="7"
+		blo="o_GasClouds.blo" cfs="gasCloud.cfs"
+		>
+		<vision>
+			00000000
+			00000100
+			00011110
+			00111111
+			01111111
+			00111111
+			00000110
+		</vision>
+	</entity>
+	<entity
+		category="nebula"
+		width="7" height="7"
+		blo="o_GasClouds.blo" cfs="gasCloud1_.cfs"
+		>
+		<vision>
+			0000000
+			0001000
+			0001100
+			0011110
+			0111100
+			0001000
+			0000000
+		</vision>
+	</entity>
+	<entity
+		category="nebula"
+		width="8" height="8"
+		blo="o_GasClouds.blo" cfs="gasCloud2_.cfs"
+		>
+		<vision>
+			00000000
+			00000000
+			00100000
+			00111000
+			00111100
+			00111110
+			00000000
+			00000000
+		</vision>
+	</entity>
+	<entity
+		category="nebula"
+		width="6" height="6"
+		blo="o_GasClouds.blo" cfs="gasCloud3sm_.cfs"
+		>
+		<vision>
+			000000
+			000000
+			001000
+			001100
+			001000
+			000000
+		</vision>
+	</entity>
+	<entity
+		category="nebula"
+		width="6" height="6"
+		blo="o_GasClouds.blo" cfs="gasCloud4sm_.cfs"
+		>
+		<vision>
+			000000
+			000000
+			001100
+			001100
+			000000
+			000000
+		</vision>
+	</entity>
+</entities>
