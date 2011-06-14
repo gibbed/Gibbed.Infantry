@@ -27,8 +27,8 @@ namespace Gibbed.Infantry.FileFormats.Sprite
     [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 12*/)]
     internal class FrameInfo
     {
-        public ushort Y;
         public ushort X;
+        public ushort Y;
         public ushort Width;
         public ushort Height;
         public uint Offset;

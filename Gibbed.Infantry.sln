@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateSpaceMap", "Generat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{2A532A44-7122-4954-B31E-DDDBFD8E7137}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Infantry.DecompileCFS", "Gibbed.Infantry.DecompileCFS\Gibbed.Infantry.DecompileCFS.csproj", "{F79874BA-6AAB-422A-92CD-731692B963E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,16 @@ Global
 		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|x86.ActiveCfg = Release|x86
 		{2A532A44-7122-4954-B31E-DDDBFD8E7137}.Release|x86.Build.0 = Release|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Debug|x86.ActiveCfg = Debug|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Debug|x86.Build.0 = Debug|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Release|Any CPU.ActiveCfg = Release|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Release|x86.ActiveCfg = Release|x86
+		{F79874BA-6AAB-422A-92CD-731692B963E6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

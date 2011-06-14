@@ -150,13 +150,11 @@ namespace Gibbed.Infantry.FileFormats
                 throw new FormatException();
             }
 
-            var frameInfos = new Sprite.FrameInfo[header.FrameCount];
-            for (int i = 0; i < frameInfos.Length; i++)
+            var infos = new Sprite.FrameInfo[header.FrameCount];
+            for (int i = 0; i < infos.Length; i++)
             {
-                frameInfos[i] = input.ReadStructure<Sprite.FrameInfo>();
+                infos[i] = input.ReadStructure<Sprite.FrameInfo>();
             }
-
-            var data = input.ReadToMemoryStream(header.DataSize);
 
             if (header.CompressionFlags != 0)
             {
@@ -167,53 +165,56 @@ namespace Gibbed.Infantry.FileFormats
                 throw new NotSupportedException();
             }
 
-            this.Frames = new Sprite.Frame[header.FrameCount];
-            for (int i = 0; i < header.FrameCount; i++)
+            using (var data = input.ReadToMemoryStream(header.DataSize))
             {
-                var info = frameInfos[i];
-                data.Seek(info.Offset, SeekOrigin.Begin);
-
-                var frame = this.Frames[i] = new Sprite.Frame();
-
-                frame.X = info.X;
-                frame.Y = info.Y;
-                frame.Width = info.Width;
-                frame.Height = info.Height;
-
-                var lengths = new int[info.Height];
-                var max = 0;
-                for (int y = 0; y < info.Height; y++)
+                this.Frames = new Sprite.Frame[header.FrameCount];
+                for (int i = 0; i < header.FrameCount; i++)
                 {
-                    int length = data.ReadValueU8();
-                    if (length == 0xFF)
-                    {
-                        length = data.ReadValueU16();
-                    }
-                    lengths[y] = length;
-                    max = Math.Max(max, length);
-                }
+                    var info = infos[i];
+                    data.Seek(info.Offset, SeekOrigin.Begin);
 
-                frame.Pixels = new byte[info.Width * info.Height];
-                
-                var scanline = new byte[max];
-                for (int y = 0, offset = 0; y < info.Height; y++, offset = y * info.Width)
-                {
-                    var length = lengths[y];
-                    if (data.Read(scanline, 0, length) != length)
-                    {
-                        throw new FormatException();
-                    }
+                    var frame = this.Frames[i] = new Sprite.Frame();
 
-                    for (int x = 0; x < length; )
+                    frame.X = info.X;
+                    frame.Y = info.Y;
+                    frame.Width = info.Width;
+                    frame.Height = info.Height;
+
+                    var lengths = new int[info.Height];
+                    var max = 0;
+                    for (int y = 0; y < info.Height; y++)
                     {
-                        offset += (scanline[x] >> 4) & 0xF;
-                        var literalCount = scanline[x] & 0xF;
-                        if (literalCount > 0)
+                        int length = data.ReadValueU8();
+                        if (length == 0xFF)
                         {
-                            Array.Copy(scanline, x + 1, frame.Pixels, offset, literalCount);
+                            length = data.ReadValueU16();
                         }
-                        offset += literalCount;
-                        x += 1 + literalCount;
+                        lengths[y] = length;
+                        max = Math.Max(max, length);
+                    }
+
+                    frame.Pixels = new byte[info.Width * info.Height];
+
+                    var scanline = new byte[max];
+                    for (int y = 0, offset = 0; y < info.Height; y++, offset = y * info.Width)
+                    {
+                        var length = lengths[y];
+                        if (data.Read(scanline, 0, length) != length)
+                        {
+                            throw new FormatException();
+                        }
+
+                        for (int x = 0; x < length; )
+                        {
+                            offset += (scanline[x] >> 4) & 0xF; // transparent
+                            var literalCount = scanline[x] & 0xF;
+                            if (literalCount > 0)
+                            {
+                                Array.Copy(scanline, x + 1, frame.Pixels, offset, literalCount);
+                            }
+                            offset += literalCount;
+                            x += 1 + literalCount;
+                        }
                     }
                 }
             }
