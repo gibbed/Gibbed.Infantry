@@ -17,5 +17,6 @@ namespace Gibbed.Infantry.FileFormats.Sprite
         RowsAreHalfRotation = 1 << 5,
         RowsAreQuarterRotation = 1 << 6,
         NoCompression = 1 << 7,
+        Unknown8 = 1 << 8,
     }
 }

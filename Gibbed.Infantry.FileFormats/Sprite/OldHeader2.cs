@@ -39,7 +39,7 @@ namespace Gibbed.Infantry.FileFormats.Sprite
         public byte CompressionFlags;
         public byte MaxSolidIndex;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         public byte[] Unknown14;
 
         public uint DataSize;

@@ -167,12 +167,15 @@ namespace Gibbed.Infantry.FileFormats
                 infos[i] = input.ReadStructure<Sprite.FrameInfo>();
             }
 
-            if (((uint)header.CompressionFlags & ~0xFFu) != 0)
+            uint compressionFlags = (uint)header.CompressionFlags;
+            if ((compressionFlags & ~0x1FFu) != 0)
             {
                 throw new FormatException("unknown compression flags");
             }
-            else if (header.Unknown20 != 0)
+            else if (header.Unknown20 != 0 &&
+                header.Unknown20 != 3)
             {
+                // WHAT DOES THIS VALUE MEAN AUGH
                 throw new NotSupportedException();
             }
 
@@ -180,7 +183,7 @@ namespace Gibbed.Infantry.FileFormats
                 Sprite.CompressionFlags.NoCompression) != 0)
             {
                 if ((header.CompressionFlags &
-                    ~Sprite.CompressionFlags.NoCompression) != 0)
+                    ~(Sprite.CompressionFlags.NoPixels | Sprite.CompressionFlags.NoCompression)) != 0)
                 {
                     throw new FormatException("other compression flags set with NoCompression flag");
                 }
