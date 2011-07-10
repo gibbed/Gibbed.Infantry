@@ -51,10 +51,10 @@ namespace GenerateSpaceMap
             int width = 500;
             int height = 500;
 
-            OptionSet options = new OptionSet()
+            var options = new OptionSet()
             {
                 {
-                    "h|help",
+                    "?|help",
                     "show this message and exit", 
                     v => showHelp = v != null
                 },
