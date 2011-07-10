@@ -48,6 +48,8 @@ namespace GenerateSpaceMap
         public static void Main(string[] args)
         {
             bool showHelp = false;
+            int width = 500;
+            int height = 500;
 
             OptionSet options = new OptionSet()
             {
@@ -55,6 +57,16 @@ namespace GenerateSpaceMap
                     "h|help",
                     "show this message and exit", 
                     v => showHelp = v != null
+                },
+                {
+                    "w|width=",
+                    "set level width",
+                    v => width = v != null ? int.Parse(v) : width
+                },
+                {
+                    "h|height=",
+                    "set level height",
+                    v => height = v != null ? int.Parse(v) : height
                 },
             };
 
@@ -85,10 +97,8 @@ namespace GenerateSpaceMap
 
             var templates = LoadEntities();
 
-            const int width = 500;
-            const int height = 500;
-            const int cx = width / 2;
-            const int cy = height / 2;
+            int cx = width / 2;
+            int cy = height / 2;
             var radius = (int)((double)Math.Min(width, height) / 2.0);
             var range = (double)Math.Min(width, height) / 2.5;
 
