@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 14*/)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1 /*, Size = 14*/)]
     internal struct OldEntity
     {
         public short X;

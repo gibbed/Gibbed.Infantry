@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -22,7 +22,7 @@
 
 using System;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Infantry.FileFormats
 {
@@ -42,7 +42,7 @@ namespace Gibbed.Infantry.FileFormats
                 {
                     var value = data[offset];
                     offset += size;
-                    
+
                     int repeat = 1;
                     for (; repeat < maxRun && offset < data.Length; offset += size)
                     {

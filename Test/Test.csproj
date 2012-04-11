@@ -47,10 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">
-      <Project>{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}</Project>
-      <Name>Gibbed.Helpers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Gibbed.Infantry.FileFormats\Gibbed.Infantry.FileFormats.csproj">
       <Project>{C2E5D029-0766-4D2E-A559-CB74A800D204}</Project>
       <Name>Gibbed.Infantry.FileFormats</Name>

@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -20,7 +20,6 @@
  *    distribution.
  */
 
-
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -28,11 +27,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("GenerateBLOTable")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("http://gib.me/")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GenerateBLOTable")]
-[assembly: AssemblyCopyright("Copyright © Gibbed 2011")]
+[assembly: AssemblyCopyright("Copyright © Gibbed 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

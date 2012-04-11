@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -26,7 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.XPath;
-using Gibbed.Helpers;
+using Gibbed.IO;
 using Gibbed.Infantry.FileFormats;
 using NDesk.Options;
 using Map = Gibbed.Infantry.FileFormats.Map;
@@ -52,28 +52,28 @@ namespace Gibbed.Infantry.DecompileLVL
             bool generateBlobs = false;
             bool stripDumbBlobs = false;
 
-            OptionSet options = new OptionSet()
+            var options = new OptionSet()
             {
                 {
                     "no-resource-mapping",
-                    "don't do resource mapping for older level files", 
+                    "don't do resource mapping for older level files",
                     v => resourceMapping = v == null
-                },
+                    },
                 {
                     "g|generate-blobs",
-                    "generate blobs for older level files when resource mapping fails", 
+                    "generate blobs for older level files when resource mapping fails",
                     v => generateBlobs = v != null
-                },
+                    },
                 {
                     "s|strip-lvb-blob-references",
                     "strip references to .lvb.blo blob files",
                     v => stripDumbBlobs = v != null
-                },
+                    },
                 {
                     "h|help",
-                    "show this message and exit", 
+                    "show this message and exit",
                     v => showHelp = v != null
-                },
+                    },
             };
 
             List<string> extras;
@@ -147,9 +147,9 @@ namespace Gibbed.Infantry.DecompileLVL
             {
                 // TODO: decrap this block of code
 
-                var resources = resourceMapping == true ?
-                    LoadBLOTable() :
-                    new SortedDictionary<string, string>();
+                var resources = resourceMapping == true
+                                    ? LoadBloTable()
+                                    : new SortedDictionary<string, string>();
 
                 if (File.Exists(lvbPath) == false)
                 {
@@ -201,30 +201,46 @@ namespace Gibbed.Infantry.DecompileLVL
 
                             if (generateBlobs == true)
                             {
+                                // ReSharper disable JoinDeclarationAndInitializer
                                 string floorBlobName;
+                                // ReSharper restore JoinDeclarationAndInitializer
+
                                 floorBlobName = "f_!";
                                 floorBlobName += Path.GetFileNameWithoutExtension(inputPath);
                                 floorBlobName = Path.ChangeExtension(floorBlobName, ".blo");
 
+                                // ReSharper disable JoinDeclarationAndInitializer
                                 string floorBlobPath;
+                                // ReSharper restore JoinDeclarationAndInitializer
+
                                 floorBlobPath = Path.GetDirectoryName(inputPath);
+                                if (floorBlobPath == null)
+                                {
+                                    throw new InvalidOperationException();
+                                }
+
                                 floorBlobPath = Path.Combine(floorBlobPath, floorBlobName);
 
                                 Console.WriteLine("Creating '{0}'...", floorBlobPath);
 
                                 using (var output = File.Create(floorBlobPath))
                                 {
-                                    var floorBlob = new BlobFile();
-                                    floorBlob.Version = 2;
+                                    var floorBlob = new BlobFile
+                                    {
+                                        Version = 2,
+                                    };
 
                                     // generate fake entries
-                                    var floors = unknownEntries.Where(f => f.Name.StartsWith("f"));
+                                    var floors = unknownEntries
+                                        .Where(f => f.Name.StartsWith("f"))
+                                        .ToArray();
+
                                     foreach (var floor in floors)
                                     {
                                         floorBlob.Entries.Add(new BlobFile.Entry()
-                                            {
-                                                Name = floor.Name,
-                                            });
+                                        {
+                                            Name = floor.Name,
+                                        });
                                     }
                                     floorBlob.Serialize(output);
 
@@ -252,24 +268,39 @@ namespace Gibbed.Infantry.DecompileLVL
                                     floorBlob.Serialize(output);
                                 }
 
+                                // ReSharper disable JoinDeclarationAndInitializer
                                 string objectBlobName;
+                                // ReSharper restore JoinDeclarationAndInitializer
+
                                 objectBlobName = "o_!";
                                 objectBlobName += Path.GetFileNameWithoutExtension(inputPath);
                                 objectBlobName = Path.ChangeExtension(objectBlobName, ".blo");
 
+                                // ReSharper disable JoinDeclarationAndInitializer
                                 string objectBlobPath;
+                                // ReSharper restore JoinDeclarationAndInitializer
+
                                 objectBlobPath = Path.GetDirectoryName(inputPath);
+                                if (objectBlobPath == null)
+                                {
+                                    throw new InvalidOperationException();
+                                }
+
                                 objectBlobPath = Path.Combine(objectBlobPath, objectBlobName);
 
                                 Console.WriteLine("Creating '{0}'...", objectBlobPath);
 
                                 using (var output = File.Create(objectBlobPath))
                                 {
-                                    var objectBlob = new BlobFile();
-                                    objectBlob.Version = 2;
+                                    var objectBlob = new BlobFile
+                                    {
+                                        Version = 2,
+                                    };
 
                                     // generate fake entries
-                                    var objects = unknownEntries.Where(o => o.Name.StartsWith("o"));
+                                    var objects = unknownEntries
+                                        .Where(o => o.Name.StartsWith("o"))
+                                        .ToArray();
                                     foreach (var obj in objects)
                                     {
                                         objectBlob.Entries.Add(new BlobFile.Entry()
@@ -310,17 +341,19 @@ namespace Gibbed.Infantry.DecompileLVL
 
             using (var output = File.Create(outputPath))
             {
-                var header = new Map.Header();
+                var header = new Map.Header
+                {
+                    Version = 9,
+                    Width = level.Width,
+                    Height = level.Height,
+                    EntityCount = level.Entities.Count,
+                    PhysicsLow = new short[32],
+                };
 
-                header.Version = 9;
-                header.Width = level.Width;
-                header.Height = level.Height;
                 // not right? DERP
                 //header.OffsetX = level.OffsetX;
                 //header.OffsetY = level.OffsetY;
-                header.EntityCount = level.Entities.Count;
 
-                header.PhysicsLow = new short[32];
                 Array.Copy(level.PhysicsLow, header.PhysicsLow, level.PhysicsLow.Length);
                 header.PhysicsHigh = new short[32];
                 Array.Copy(level.PhysicsHigh, header.PhysicsHigh, level.PhysicsHigh.Length);
@@ -361,15 +394,15 @@ namespace Gibbed.Infantry.DecompileLVL
                             else
                             {
                                 reference.Path = string.Format("{0},{1}",
-                                    lvbName,
-                                    floor.Id);
+                                                               lvbName,
+                                                               floor.Id);
                             }
                         }
                         else
                         {
                             reference.Path = string.Format("{0},{1}",
-                                floor.FileName,
-                                floor.Id);
+                                                           floor.FileName,
+                                                           floor.Id);
                         }
                     }
 
@@ -377,7 +410,9 @@ namespace Gibbed.Infantry.DecompileLVL
                 }
 
                 var tiles = new byte[level.Width * level.Height * 4];
+                // ReSharper disable UnusedVariable
                 int offset = 0;
+                // ReSharper restore UnusedVariable
 
                 for (int i = 0, j = 0; i < level.Tiles.Length; i++, j += 4)
                 {
@@ -397,11 +432,11 @@ namespace Gibbed.Infantry.DecompileLVL
                     output.WriteFromStream(rle, rle.Length);
                 }
 
-                for (int i = 0; i < level.Entities.Count; i++)
+                foreach (var t in level.Entities)
                 {
-                    output.WriteStructure(level.Entities[i]);
+                    output.WriteStructure(t);
 
-                    var obj = level.Objects[level.Entities[i].ObjectId];
+                    var obj = level.Objects[t.ObjectId];
 
                     var reference = new Map.BlobReference();
 
@@ -414,15 +449,15 @@ namespace Gibbed.Infantry.DecompileLVL
                         else
                         {
                             reference.Path = string.Format("{0},{1}",
-                                lvbName,
-                                obj.Id);
+                                                           lvbName,
+                                                           obj.Id);
                         }
                     }
                     else
                     {
                         reference.Path = string.Format("{0},{1}",
-                            obj.FileName,
-                            obj.Id);
+                                                       obj.FileName,
+                                                       obj.Id);
                     }
 
                     output.WriteStructure(reference);
@@ -430,12 +465,20 @@ namespace Gibbed.Infantry.DecompileLVL
             }
         }
 
-        private static SortedDictionary<string, string> LoadBLOTable()
+        private static SortedDictionary<string, string> LoadBloTable()
         {
             var resources = new SortedDictionary<string, string>();
 
+            // ReSharper disable JoinDeclarationAndInitializer
             string inputPath;
+            // ReSharper restore JoinDeclarationAndInitializer
+
             inputPath = Path.GetDirectoryName(GetExecutablePath());
+            if (inputPath == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             inputPath = Path.Combine(inputPath, "blotable.xml");
 
             if (File.Exists(inputPath) == false)
@@ -451,14 +494,20 @@ namespace Gibbed.Infantry.DecompileLVL
                 var nodes = nav.Select("/resources/*/resource");
                 while (nodes.MoveNext() == true)
                 {
-                    var hash = nodes.Current.GetAttribute("hash", "");
+                    var current = nodes.Current;
+                    if (current == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    var hash = current.GetAttribute("hash", "");
 
                     if (resources.ContainsKey(hash) == true)
                     {
                         continue;
                     }
 
-                    var source = nodes.Current.SelectSingleNode("source");
+                    var source = current.SelectSingleNode("source");
                     if (source == null)
                     {
                         continue;

@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 17*/)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1 /*, Size = 17*/)]
     public struct Entity
     {
         public short X;
@@ -44,7 +44,9 @@ namespace Gibbed.Infantry.FileFormats.Level
             }
         }
 
+        // ReSharper disable InconsistentNaming
         public int UnknownA_1
+            // ReSharper restore InconsistentNaming
         {
             get { return (int)((this.BitsA & 0x000FE000) >> 13); }
             set
@@ -136,7 +138,9 @@ namespace Gibbed.Infantry.FileFormats.Level
             set
             {
                 this.BitsC &= ~0x000000FFu;
+                // ReSharper disable RedundantCast
                 this.BitsC |= (uint)((byte)value & 0x000000FFu);
+                // ReSharper restore RedundantCast
             }
         }
 
@@ -201,7 +205,9 @@ namespace Gibbed.Infantry.FileFormats.Level
         }
 
         // probably unused
+        // ReSharper disable InconsistentNaming
         public bool UnknownC_6
+            // ReSharper restore InconsistentNaming
         {
             get { return (this.BitsC & 0x80000000) != 0; }
             set
@@ -219,7 +225,9 @@ namespace Gibbed.Infantry.FileFormats.Level
 
         public int PaletteShift
         {
+            // ReSharper disable RedundantCast
             get { return (int)(this.BitsD & 0x3F); }
+            // ReSharper restore RedundantCast
             set
             {
                 this.BitsC &= ~0x3Fu;
@@ -228,9 +236,13 @@ namespace Gibbed.Infantry.FileFormats.Level
         }
 
         // probably unused
+        // ReSharper disable InconsistentNaming
         public int UnknownD_1
+            // ReSharper restore InconsistentNaming
         {
+            // ReSharper disable RedundantCast
             get { return (int)((this.BitsD & 0xC0) >> 6); }
+            // ReSharper restore RedundantCast
             set
             {
                 this.BitsD &= 0x3F; //~0xC0

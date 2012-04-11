@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -22,7 +22,7 @@
 
 using System;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Infantry.FileFormats
 {
@@ -62,7 +62,7 @@ namespace Gibbed.Infantry.FileFormats
             }
 
             var header = new Sprite.Header();
-            
+
             if (version >= 5)
             {
                 header = input.ReadStructure<Sprite.Header>();
@@ -136,7 +136,8 @@ namespace Gibbed.Infantry.FileFormats
             {
                 throw new FormatException();
             }
-            else if (header.ShadowCount != 0 &&
+
+            if (header.ShadowCount != 0 &&
                 header.ShadowCount != 8)
             {
                 throw new FormatException();
@@ -169,12 +170,13 @@ namespace Gibbed.Infantry.FileFormats
                 infos[i] = input.ReadStructure<Sprite.FrameInfo>();
             }
 
-            uint compressionFlags = (uint)header.CompressionFlags;
+            var compressionFlags = (uint)header.CompressionFlags;
             if ((compressionFlags & ~0x1FFu) != 0)
             {
                 throw new FormatException("unknown compression flags");
             }
-            else if (header.Unknown20 != 0 &&
+
+            if (header.Unknown20 != 0 &&
                 header.Unknown20 != 3)
             {
                 // WHAT DOES THIS VALUE MEAN AUGH
@@ -182,10 +184,10 @@ namespace Gibbed.Infantry.FileFormats
             }
 
             if ((header.CompressionFlags &
-                Sprite.CompressionFlags.NoCompression) != 0)
+                 Sprite.CompressionFlags.NoCompression) != 0)
             {
                 if ((header.CompressionFlags &
-                    ~(Sprite.CompressionFlags.NoPixels | Sprite.CompressionFlags.NoCompression)) != 0)
+                     ~(Sprite.CompressionFlags.NoPixels | Sprite.CompressionFlags.NoCompression)) != 0)
                 {
                     throw new FormatException("other compression flags set with NoCompression flag");
                 }
@@ -208,7 +210,7 @@ namespace Gibbed.Infantry.FileFormats
                     frame.Pixels = new byte[frame.Width * frame.Height];
 
                     if ((header.CompressionFlags &
-                        Sprite.CompressionFlags.NoCompression) != 0)
+                         Sprite.CompressionFlags.NoCompression) != 0)
                     {
                         // uncompressed data
                         data.Read(frame.Pixels, 0, frame.Pixels.Length);
@@ -239,7 +241,7 @@ namespace Gibbed.Infantry.FileFormats
                                 throw new FormatException();
                             }
 
-                            for (int x = 0; x < length; )
+                            for (int x = 0; x < length;)
                             {
                                 offset += (scanline[x] >> 4) & 0xF; // transparent
                                 var literalCount = scanline[x] & 0xF;

@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -24,14 +24,14 @@ using System.Runtime.InteropServices;
 
 namespace Gibbed.Infantry.FileFormats.Level
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1/*, Size = 5152*/)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1 /*, Size = 5152*/)]
     public struct Header
     {
         public int Version;
-        
+
         public int Width;
         public int Height;
-        
+
         public int EntityCount;
         public int FloorCount;
         public int ObjectCount;

@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -23,13 +23,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Infantry.FileFormats
 {
     public class BlobFile
     {
         public uint Version;
+
         public List<Entry> Entries
             = new List<Entry>();
 
@@ -74,7 +75,9 @@ namespace Gibbed.Infantry.FileFormats
             this.Entries = new List<Entry>();
             for (uint i = 0; i < count; i++)
             {
+                // ReSharper disable UseObjectOrCollectionInitializer
                 var entry = new Entry();
+                // ReSharper restore UseObjectOrCollectionInitializer
                 entry.Name = input.ReadString(nameLength, true);
                 entry.Offset = input.ReadValueU32();
                 entry.Size = input.ReadValueU32();

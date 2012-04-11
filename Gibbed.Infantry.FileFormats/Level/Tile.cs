@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -55,7 +55,7 @@ namespace Gibbed.Infantry.FileFormats.Level
 
         public int TerrainLookup
         {
-			get { return (this.BitsA & 0x7F); }
+            get { return (this.BitsA & 0x7F); }
             set
             {
                 this.BitsA &= 0x80;

@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -23,7 +23,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
+using Enumerable = System.Linq.Enumerable;
 
 namespace Gibbed.Infantry.FileFormats
 {
@@ -102,19 +103,16 @@ namespace Gibbed.Infantry.FileFormats
         public void Deserialize(Stream input)
         {
             var header = input.ReadStructure<Level.Header>();
-            
+
             this.Width = header.Width;
             this.Height = header.Height;
 
             this.OffsetX = header.OffsetX;
             this.OffsetY = header.OffsetY;
 
-            for (int i = 0; i < header.Padding.Length; i++)
+            if (Enumerable.Any(header.Padding, t => t != 0) == true)
             {
-                if (header.Padding[i] != 0)
-                {
-                    throw new FormatException("non-zero data in padding");
-                }
+                throw new FormatException("non-zero data in padding");
             }
 
             Array.Copy(header.TerrainIds, this.TerrainIds, header.TerrainIds.Length);
@@ -143,14 +141,15 @@ namespace Gibbed.Infantry.FileFormats
             {
                 if (header.Version >= 6)
                 {
-
                     objects[i] = input.ReadStructure<Level.BlobReference>();
                 }
                 else
                 {
-                    objects[i] = new Level.BlobReference();
-                    objects[i].FileName = null;
-                    objects[i].Id = string.Format("o{0}.cfs", i);
+                    objects[i] = new Level.BlobReference
+                    {
+                        FileName = null,
+                        Id = string.Format("o{0}.cfs", i),
+                    };
                 }
             }
             this.Objects = new List<Level.BlobReference>();
@@ -165,9 +164,11 @@ namespace Gibbed.Infantry.FileFormats
                 }
                 else
                 {
-                    floors[i] = new Level.BlobReference();
-                    floors[i].FileName = null;
-                    floors[i].Id = string.Format("f{0}.cfs", i);
+                    floors[i] = new Level.BlobReference
+                    {
+                        FileName = null,
+                        Id = string.Format("f{0}.cfs", i),
+                    };
                 }
             }
             this.Floors = new List<Level.BlobReference>();
@@ -218,7 +219,7 @@ namespace Gibbed.Infantry.FileFormats
                     for (int i = 0; i < header.EntityCount; i++)
                     {
                         var oldEntity = entityData.ReadStructure<Level.OldEntity>();
-                        
+
                         //entities[i] = new Level.Entity();
                         entities[i].X = oldEntity.X;
                         entities[i].Y = oldEntity.Y;

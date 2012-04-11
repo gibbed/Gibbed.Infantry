@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -27,7 +27,8 @@ namespace GenerateSpaceMap
     public static class PerlinNoise
     {
         public static byte[,] Generate(
-            int width, int height,
+            int width,
+            int height,
             float frequency,
             float amplitude,
             float persistance,
@@ -35,16 +36,23 @@ namespace GenerateSpaceMap
             Random rng)
         {
             var noise = GenerateNoise(rng, width, height);
-            
-            var map = new byte[width, height];
+
+            var map = new byte[width,height];
             for (int x = 0; x < width; ++x)
             {
                 for (int y = 0; y < height; ++y)
                 {
                     var value = GetValue(
-                        x, y, width, height,
-                        frequency, amplitude, persistance, octaves, noise);
-                    
+                        x,
+                        y,
+                        width,
+                        height,
+                        frequency,
+                        amplitude,
+                        persistance,
+                        octaves,
+                        noise);
+
                     value = (value * 0.5f) + 0.5f;
                     value *= 255;
 
@@ -56,7 +64,10 @@ namespace GenerateSpaceMap
         }
 
         private static float GetValue(
-            int x, int y, int width, int height,
+            int x,
+            int y,
+            int width,
+            int height,
             float frequency,
             float amplitude,
             float persistance,
@@ -68,8 +79,10 @@ namespace GenerateSpaceMap
             for (int i = 0; i < octaves; ++i)
             {
                 value += GetSmoothNoise(
-                    x * frequency, y * frequency,
-                    width, height,
+                    x * frequency,
+                    y * frequency,
+                    width,
+                    height,
                     noise) * amplitude;
                 frequency *= 2.0f;
                 amplitude *= persistance;
@@ -88,7 +101,10 @@ namespace GenerateSpaceMap
         }
 
         private static float GetSmoothNoise(
-            float x, float y, int width, int height,
+            float x,
+            float y,
+            int width,
+            int height,
             float[,] noise)
         {
             float fractionX = x - (int)x;
@@ -112,7 +128,7 @@ namespace GenerateSpaceMap
             int width,
             int height)
         {
-            var noise = new float[width, height];
+            var noise = new float[width,height];
 
             for (int x = 0; x < width; ++x)
             {

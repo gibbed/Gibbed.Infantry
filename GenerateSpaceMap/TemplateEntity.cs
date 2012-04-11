@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -36,15 +36,14 @@ namespace GenerateSpaceMap
         public readonly byte[,] Physics;
         public readonly byte[,] Vision;
 
-        private TemplateEntity()
-        {
-        }
-
         public TemplateEntity(
-            int offsetX, int offsetY,
-            int width, int height,
+            int offsetX,
+            int offsetY,
+            int width,
+            int height,
             string category,
-            string bloName, string cfsName)
+            string bloName,
+            string cfsName)
         {
             this.OffsetX = offsetX;
             this.OffsetY = offsetY;
@@ -53,13 +52,16 @@ namespace GenerateSpaceMap
             this.Category = category;
             this.BloName = bloName;
             this.CfsName = cfsName;
-            this.Physics = new byte[width, height];
-            this.Vision = new byte[width, height];
+            this.Physics = new byte[width,height];
+            this.Vision = new byte[width,height];
         }
 
         public bool CanPlaceWithPhysics(
-            int x, int y,
-            bool[,] blocked, int width, int height)
+            int x,
+            int y,
+            bool[,] blocked,
+            int width,
+            int height)
         {
             if (x + this.Width > width ||
                 y + this.Height > height)
@@ -83,8 +85,11 @@ namespace GenerateSpaceMap
         }
 
         public bool CanPlaceWithVision(
-            int x, int y,
-            bool[,] blocked, int width, int height)
+            int x,
+            int y,
+            bool[,] blocked,
+            int width,
+            int height)
         {
             if (x + this.Width > width ||
                 y + this.Height > height)
@@ -108,7 +113,8 @@ namespace GenerateSpaceMap
         }
 
         public void BlockPhysics(
-            int x, int y,
+            int x,
+            int y,
             bool[,] blocked)
         {
             for (int rx = 0; rx < this.Width; rx++)
@@ -122,7 +128,8 @@ namespace GenerateSpaceMap
         }
 
         public void BlockVision(
-            int x, int y,
+            int x,
+            int y,
             bool[,] blocked)
         {
             for (int rx = 0; rx < this.Width; rx++)
@@ -142,7 +149,7 @@ namespace GenerateSpaceMap
                 throw new ArgumentNullException("physics");
             }
 
-            int i = 0;
+            int i;
             int x = 0, y = 0;
             for (i = 0; i < physics.Length; i++)
             {
@@ -150,7 +157,8 @@ namespace GenerateSpaceMap
                 {
                     continue;
                 }
-                else if (y >= this.Height)
+
+                if (y >= this.Height)
                 {
                     throw new ArgumentException("too much data", "physics");
                 }
@@ -185,7 +193,7 @@ namespace GenerateSpaceMap
                 throw new ArgumentNullException("vision");
             }
 
-            int i = 0;
+            int i;
             int x = 0, y = 0;
             for (i = 0; i < vision.Length; i++)
             {
@@ -193,7 +201,8 @@ namespace GenerateSpaceMap
                 {
                     continue;
                 }
-                else if (y >= this.Height)
+
+                if (y >= this.Height)
                 {
                     throw new ArgumentException("too much data", "vision");
                 }

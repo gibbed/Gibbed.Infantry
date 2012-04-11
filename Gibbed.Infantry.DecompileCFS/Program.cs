@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -43,18 +43,18 @@ namespace Gibbed.Infantry.DecompileCFS
             bool showHelp = false;
             bool dontFixSpecialColors = false;
 
-            OptionSet options = new OptionSet()
+            var options = new OptionSet()
             {
                 {
                     "ncf|no-color-fix",
                     "don't fix special colors (such as shadows, lights)",
                     v => dontFixSpecialColors = v != null
-                },
+                    },
                 {
                     "h|help",
-                    "show this message and exit", 
+                    "show this message and exit",
                     v => showHelp = v != null
-                },
+                    },
             };
 
             List<string> extras;
@@ -102,14 +102,14 @@ namespace Gibbed.Infantry.DecompileCFS
             for (int i = 0; i < 256; i++)
             {
                 var color = sprite.Palette[i];
-                
+
                 var r = (int)((color >> 16) & 0xFF);
                 var g = (int)((color >> 8) & 0xFF);
                 var b = (int)((color >> 0) & 0xFF);
                 //var a = (int)((color >> 24) & 0xFF);
-                
+
                 int a;
-                
+
                 if (i == 0)
                 {
                     // transparent pixel
@@ -141,7 +141,7 @@ namespace Gibbed.Infantry.DecompileCFS
                         a = 255;
                     }
                 }
-                /*else if (i > sprite.MaxSolidIndex)
+                    /*else if (i > sprite.MaxSolidIndex)
                 {
                     a = 0;
                 }*/
@@ -153,7 +153,7 @@ namespace Gibbed.Infantry.DecompileCFS
                 palette.Entries[i] = Color.FromArgb(a, r, g, b);
             }
             bitmap.Palette = palette;
-            
+
             for (int i = 0, y = 0; y < sprite.Height * sprite.RowCount; y += sprite.Height)
             {
                 for (int x = 0; x < sprite.Width * sprite.ColumnCount; x += sprite.Width)
@@ -167,9 +167,11 @@ namespace Gibbed.Infantry.DecompileCFS
                     }
 
                     var area = new Rectangle(
-                        x + frame.X, y + frame.Y,
-                        frame.Width, frame.Height);
-                    
+                        x + frame.X,
+                        y + frame.Y,
+                        frame.Width,
+                        frame.Height);
+
                     var data = bitmap.LockBits(area, ImageLockMode.WriteOnly, bitmap.PixelFormat);
                     var scan = data.Scan0;
                     for (int o = 0; o < frame.Height * frame.Width; o += frame.Width)

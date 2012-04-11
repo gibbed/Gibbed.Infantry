@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.XPath;
-using Gibbed.Helpers;
+using Gibbed.IO;
 using Gibbed.Infantry.FileFormats;
 using NDesk.Options;
 using Level = Gibbed.Infantry.FileFormats.Level;
@@ -55,19 +55,19 @@ namespace GenerateSpaceMap
             {
                 {
                     "?|help",
-                    "show this message and exit", 
+                    "show this message and exit",
                     v => showHelp = v != null
-                },
+                    },
                 {
                     "w|width=",
                     "set level width",
                     v => width = v != null ? int.Parse(v) : width
-                },
+                    },
                 {
                     "h|height=",
                     "set level height",
                     v => height = v != null ? int.Parse(v) : height
-                },
+                    },
             };
 
             List<string> extras;
@@ -99,15 +99,17 @@ namespace GenerateSpaceMap
 
             int cx = width / 2;
             int cy = height / 2;
-            var radius = (int)((double)Math.Min(width, height) / 2.0);
-            var range = (double)Math.Min(width, height) / 2.5;
+            // ReSharper disable UnusedVariable
+            var radius = (int)(Math.Min(width, height) / 2.0);
+            // ReSharper restore UnusedVariable
+            var range = Math.Min(width, height) / 2.5;
 
             var rng = new MersenneTwister();
             var noise = PerlinNoise.Generate(
                 width, height, 0.0325f, 1.0f, 0.5f, 16, rng);
 
-            var physics = new bool[width, height];
-            var vision = new bool[width, height];
+            var physics = new bool[width,height];
+            var vision = new bool[width,height];
 
             var entities = new List<Entity>();
 
@@ -144,14 +146,35 @@ namespace GenerateSpaceMap
                                 var entity = new Entity(x, y, template);
 
                                 int speed = rng.Next(100);
-                                
-                                if (speed < 60) entity.AnimationTime = 0;
-                                else if (speed < 70) entity.AnimationTime = 100;
-                                else if (speed < 80) entity.AnimationTime = 200;
-                                else if (speed < 85) entity.AnimationTime = 250;
-                                else if (speed < 90) entity.AnimationTime = 350;
-                                else if (speed < 95) entity.AnimationTime = 400;
-                                else entity.AnimationTime = 450;
+
+                                if (speed < 60)
+                                {
+                                    entity.AnimationTime = 0;
+                                }
+                                else if (speed < 70)
+                                {
+                                    entity.AnimationTime = 100;
+                                }
+                                else if (speed < 80)
+                                {
+                                    entity.AnimationTime = 200;
+                                }
+                                else if (speed < 85)
+                                {
+                                    entity.AnimationTime = 250;
+                                }
+                                else if (speed < 90)
+                                {
+                                    entity.AnimationTime = 350;
+                                }
+                                else if (speed < 95)
+                                {
+                                    entity.AnimationTime = 400;
+                                }
+                                else
+                                {
+                                    entity.AnimationTime = 450;
+                                }
 
                                 template.BlockPhysics(x, y, physics);
                                 entities.Add(entity);
@@ -176,8 +199,10 @@ namespace GenerateSpaceMap
                             if (template != null &&
                                 template.CanPlaceWithVision(x, y, vision, width, height) == true)
                             {
-                                var entity = new Entity(x, y, template);
-                                entity.AnimationTime = 50;
+                                var entity = new Entity(x, y, template)
+                                {
+                                    AnimationTime = 50
+                                };
 
                                 template.BlockVision(x, y, vision);
                                 entities.Add(entity);
@@ -187,7 +212,7 @@ namespace GenerateSpaceMap
                 }
             }
 
-            var tiles = new Level.Tile[width, height];
+            var tiles = new Level.Tile[width,height];
 
             foreach (var entity in entities)
             {
@@ -210,28 +235,31 @@ namespace GenerateSpaceMap
                 }
             }
 
-            var floors = new List<Map.BlobReference>();
-            floors.Add(new Map.BlobReference() { Path = "f_default.blo,default.cfs" });
+            var floors = new List<Map.BlobReference>
+            {
+                new Map.BlobReference()
+                {
+                    Path = "f_default.blo,default.cfs"
+                },
+            };
             //floors.Add(new Map.BlobReference() { Path = "f_colors.blo,color3.cfs" });
 
             using (var output = File.Create(outputPath))
             {
-                var header = new Map.Header();
+                var header = new Map.Header
+                {
+                    Version = 9,
+                    Width = width,
+                    Height = height,
+                    EntityCount = entities.Count,
+                    LightColorWhite = 0xFFFFFF00u,
+                    LightColorRed = 0x0000FF00u,
+                    LightColorGreen = 0x00FF0000u,
+                    LightColorBlue = 0xFF000000u,
+                    PhysicsLow = new short[32],
+                    PhysicsHigh = new short[32],
+                };
 
-                header.Version = 9;
-                header.Width = width;
-                header.Height = height;
-
-                header.EntityCount = entities.Count;
-
-                header.LightColorWhite = 0xFFFFFF00u;
-                header.LightColorRed = 0x0000FF00u;
-                header.LightColorGreen = 0x00FF0000u;
-                header.LightColorBlue = 0xFF000000u;
-
-                header.PhysicsLow = new short[32];
-                
-                header.PhysicsHigh = new short[32];
                 header.PhysicsHigh[0] = 0;
                 header.PhysicsHigh[1] = 1024;
                 header.PhysicsHigh[2] = 1024;
@@ -314,14 +342,18 @@ namespace GenerateSpaceMap
 
                 foreach (var source in entities)
                 {
-                    var entity = new Level.Entity();
-                    entity.X = (short)((source.X - source.Template.OffsetX) * 16);
-                    entity.Y = (short)((source.Y - source.Template.OffsetY) * 16);
-                    entity.AnimationTime = source.AnimationTime;
+                    var entity = new Level.Entity
+                    {
+                        X = (short)((source.X - source.Template.OffsetX) * 16),
+                        Y = (short)((source.Y - source.Template.OffsetY) * 16),
+                        AnimationTime = source.AnimationTime,
+                    };
                     output.WriteStructure(entity);
 
-                    var reference = new Map.BlobReference();
-                    reference.Path = string.Format("{0},{1}", source.Template.BloName, source.Template.CfsName);
+                    var reference = new Map.BlobReference
+                    {
+                        Path = string.Format("{0},{1}", source.Template.BloName, source.Template.CfsName),
+                    };
                     output.WriteStructure(reference);
                 }
             }
@@ -331,15 +363,18 @@ namespace GenerateSpaceMap
             int x1, int y1, int x2, int y2)
         {
             return Math.Sqrt(
-                Math.Pow((float)(x2 - x1), 2) +
-                Math.Pow((float)(y2 - y1), 2));
+                Math.Pow(x2 - x1, 2) +
+                Math.Pow(y2 - y1, 2));
         }
 
         private static List<TemplateEntity> LoadEntities()
         {
             var entities = new List<TemplateEntity>();
 
+            // ReSharper disable JoinDeclarationAndInitializer
             string inputPath;
+            // ReSharper restore JoinDeclarationAndInitializer
+
             inputPath = GetExecutablePath();
             inputPath = Path.Combine(inputPath, "space_entities.xml");
 
@@ -358,6 +393,10 @@ namespace GenerateSpaceMap
                 while (nodes.MoveNext() == true)
                 {
                     var current = nodes.Current;
+                    if (current == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
 
                     var category = current.GetAttribute("category", "");
                     var x = current.GetAttribute("x", "");

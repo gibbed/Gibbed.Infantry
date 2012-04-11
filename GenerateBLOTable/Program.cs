@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2011 Rick (rick 'at' gibbed 'dot' us)
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -53,13 +53,13 @@ namespace GenerateBLOTable
         {
             bool showHelp = false;
 
-            OptionSet options = new OptionSet()
+            var options = new OptionSet()
             {
                 {
                     "h|help",
-                    "show this message and exit", 
+                    "show this message and exit",
                     v => showHelp = v != null
-                },
+                    },
             };
 
             List<string> extras;
@@ -76,7 +76,7 @@ namespace GenerateBLOTable
                 return;
             }
 
-            if (extras.Count < 0 || extras.Count > 1|| showHelp == true)
+            if (extras.Count < 0 || extras.Count > 1 || showHelp == true)
             {
                 Console.WriteLine("Usage: {0} [OPTIONS]+ [input_directory]", GetExecutableName());
                 Console.WriteLine();
@@ -85,9 +85,9 @@ namespace GenerateBLOTable
                 return;
             }
 
-            var directoryPath = extras.Count == 0 ?
-                Directory.GetCurrentDirectory() :
-                extras[0];
+            var directoryPath = extras.Count == 0
+                                    ? Directory.GetCurrentDirectory()
+                                    : extras[0];
 
             var md5 = MD5.Create();
             var resources = new SortedDictionary<string, List<ResourceLocation>>();
@@ -95,12 +95,18 @@ namespace GenerateBLOTable
             foreach (var inputPath in Directory.GetFiles(directoryPath, "*.blo"))
             {
                 var fileName = Path.GetFileName(inputPath);
+                if (fileName == null)
+                {
+                    continue;
+                }
+
                 if (fileName.StartsWith("o_") == false &&
                     fileName.StartsWith("f_") == false)
                 {
                     continue;
                 }
-                else if (fileName.EndsWith(".lvb.blo") == true)
+
+                if (fileName.EndsWith(".lvb.blo") == true)
                 {
                     continue;
                 }
@@ -145,11 +151,18 @@ namespace GenerateBLOTable
                 }
             }
 
-            var custom = LoadBLOTableCustom();
+            var custom = LoadBloTableCustom();
 
+            // ReSharper disable JoinDeclarationAndInitializer
             string outputPath;
+            // ReSharper restore JoinDeclarationAndInitializer
 
             outputPath = Path.GetDirectoryName(GetExecutablePath());
+            if (outputPath == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             outputPath = Path.Combine(outputPath, "blotable.xml");
 
             var settings = new XmlWriterSettings()
@@ -206,12 +219,20 @@ namespace GenerateBLOTable
             }
         }
 
-        private static SortedDictionary<string, List<ResourceLocation>> LoadBLOTableCustom()
+        private static SortedDictionary<string, List<ResourceLocation>> LoadBloTableCustom()
         {
             var resources = new SortedDictionary<string, List<ResourceLocation>>();
 
+            // ReSharper disable JoinDeclarationAndInitializer
             string inputPath;
+            // ReSharper restore JoinDeclarationAndInitializer
+
             inputPath = Path.GetDirectoryName(GetExecutablePath());
+            if (inputPath == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             inputPath = Path.Combine(inputPath, "blotable.xml");
 
             if (File.Exists(inputPath) == false)
@@ -222,20 +243,25 @@ namespace GenerateBLOTable
             using (var input = File.OpenRead(inputPath))
             {
                 var doc = new XPathDocument(input);
-                
+
                 var nav = doc.CreateNavigator();
 
                 var nodes = nav.Select("/resources/custom/resource");
                 while (nodes.MoveNext() == true)
                 {
-                    var hash = nodes.Current.GetAttribute("hash", "");
+                    var node = nodes.Current;
+                    if (node == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
 
+                    var hash = node.GetAttribute("hash", "");
                     if (resources.ContainsKey(hash) == true)
                     {
                         continue;
                     }
 
-                    var source = nodes.Current.SelectSingleNode("source");
+                    var source = node.SelectSingleNode("source");
                     if (source == null)
                     {
                         continue;
@@ -250,10 +276,10 @@ namespace GenerateBLOTable
                     }
 
                     resources[hash].Add(new ResourceLocation()
-                        {
-                            FileName = filename,
-                            Id = id,
-                        });
+                    {
+                        FileName = filename,
+                        Id = id,
+                    });
                 }
             }
 
